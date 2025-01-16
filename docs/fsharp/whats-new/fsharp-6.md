@@ -2,6 +2,7 @@
 title: What's new in F# 6 - F# Guide
 description: Get an overview of the new features available in F# 6.
 ms.date: 10/13/2021
+ms.topic: whats-new
 ---
 # What's new in F# 6
 
@@ -41,7 +42,7 @@ Task support was available for F# 5 through the excellent TaskBuilder.fs and Ply
 
 Using `task {…}` is very similar to using `async {…}`. Using `task {…}` has several advantages over `async {…}`:
 
-* The performance of `task {…}` is much better.
+* The overhead of `task {...}` is lower, possibly improving performance in hot code paths where the asynchronous work executes quickly.
 * Debugging stepping and stack traces for `task {…}` is better.
 * Interoperating with .NET packages that expect or produce tasks is easier.
 
@@ -62,7 +63,7 @@ F# 6 allows the syntax `expr[idx]` for indexing and slicing collections.
 
 Up to and including F# 5, F# has used `expr.[idx]` as indexing syntax. Allowing the use of `expr[idx]` is based on repeated feedback from those learning F# or seeing F# for the first time that the use of dot-notation indexing comes across as an unnecessary divergence from standard industry practice.
 
-This is not a breaking change because by default, no warnings are emitted on the use of `expr.[idx]`. However, some informational messages that suggest code clarifications are emitted. You can optionally activate further informational messages as well. For example, you can activate an optional informational warning (`/warnon:3566`) to start reporting uses of the `expr.[idx]` notation. For more information, see [Indexer Notation]( https://aka.ms/fsharp-index-notation).
+This is not a breaking change because by default, no warnings are emitted on the use of `expr.[idx]`. However, some informational messages that suggest code clarifications are emitted. You can optionally activate further informational messages as well. For example, you can activate an optional informational warning (`/warnon:3366`) to start reporting uses of the `expr.[idx]` notation. For more information, see [Indexer Notation]( https://aka.ms/fsharp-index-notation).
 
 In new code, we recommend the systematic use of `expr[idx]` as the indexing syntax.
 
@@ -86,7 +87,7 @@ This feature implements [F# RFC FS-1039](https://github.com/fsharp/fslang-design
 
 ## Overloaded custom operations in computation expressions
 
-F# 6 lets you consume [interfaces with default implementations](../../csharp/tutorials/default-interface-methods-versions.md).
+F# 6 lets you use [CustomOperationAttribute](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-customoperationattribute.html) on the overloaded methods.
 
 Consider the following use of a computation expression builder `content`:
 
@@ -354,10 +355,10 @@ Then after inlining and other optimizations, the code becomes:
 ```fsharp
 let arr = [| 1.. 100 |]
 let mutable sum = 0
-for j = 0 to array.Length-1 do
-    sum <- array[i] + x
-for j = 0 to array.Length-1 do
-    sum <- array[i] + x
+for j = 0 to arr.Length-1 do
+    sum <- sum + arr[j]
+for j = 0 to arr.Length-1 do
+    sum <- sum + arr[j]
 ```
 
 Unlike previous versions of F#, this optimization is applied regardless of the size of the lambda expression involved. This feature can also be used to implement loop unrolling and similar transformations more reliably.
@@ -368,7 +369,7 @@ This feature implements [F# RFC FS-1098](https://github.com/fsharp/fslang-design
 
 ## Resumable code
 
-The `task {…}` support of F# 6 is built on a foundation called *resumable code* [RFC FS-1087](https://github.com/fsharp/fslang-design/blob/main/preview/FS-1087-resumable-code.md). Resumable code is a technical feature that can be used to build many kinds of high-performance asynchronous and yielding state machines.
+The `task {…}` support of F# 6 is built on a foundation called *resumable code* [RFC FS-1087](https://github.com/fsharp/fslang-design/blob/main/FSharp-6.0/FS-1087-resumable-code.md). Resumable code is a technical feature that can be used to build many kinds of high-performance asynchronous and yielding state machines.
 
 ## Additional collection functions
 

@@ -3,9 +3,9 @@ title: Install the .NET Framework on Windows 10
 description: Learn how to install the .NET Framework on Windows 10 or Windows Server 2016.
 ms.date: 10/06/2021
 ---
-# Install the .NET Framework on Windows 10 and Windows Server 2016 and later
+# Install .NET Framework on Windows 10 and Windows Server 2016 and later
 
-The .NET Framework is required to run many applications on Windows. The instructions in this article should help you install the .NET Framework versions that you need. The [.NET Framework 4.8](https://github.com/Microsoft/dotnet/tree/master/releases/net48) is the latest available version.
+The .NET Framework is required to run many applications on Windows. The instructions in this article should help you install the .NET Framework versions that you need. The [.NET Framework 4.8](https://github.com/Microsoft/dotnet/tree/main/releases/net48) is the latest available version.
 
 You may have arrived on this page after trying to run an application and seeing a dialog on your machine similar to the following one:
 
@@ -24,7 +24,7 @@ You may have arrived on this page after trying to run an application and seeing 
 > [!div class="button"]
 > [Download .NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
-[.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) can be used to run applications built for the .NET Framework 4.0 through 4.7.2.
+[.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) can be used to run applications built for the .NET Framework 4.0 through 4.8.
 
 You can install [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) on:
 

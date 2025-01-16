@@ -1,5 +1,5 @@
 ---
-title: "Classes, structs, and records in C#"
+title: "Classes, structs, and records"
 description: Describes the use of classes, structures (structs), and records in C#.
 ms.date: 03/23/2022
 helpviewer_keywords: 
@@ -12,7 +12,7 @@ helpviewer_keywords:
   - "objects [C#]"
   - "C# language, classes"
 ---
-# Overview of classes, structs, and records in C\#
+# Overview of object oriented techniques in C\#
 
 In C#, the definition of a type&mdash;a class, struct, or record&mdash;is like a blueprint that specifies what the type can do. An object is basically a block of memory that has been allocated and configured according to the blueprint. This article provides an overview of these blueprints and their features. The [next article in this series](objects.md) introduces objects.
 
@@ -98,7 +98,7 @@ Within a class or struct method, you can use implicit typing to instruct the com
 
 ## Records
 
-C# 9 introduces the `record` type, a reference type that you can create instead of a class or a struct. Records are classes with built-in behavior for encapsulating data in immutable types. C# 10 introduces the `record struct` value type. A record (either `record class` or `record struct`) provides the following features:
+You can add the `record` modifier to a class or a struct. Records are types with built-in behavior for value-based equality. A record (either `record class` or `record struct`) provides the following features:
 
 * Concise syntax for creating a reference type with immutable properties.
 * Value equality.

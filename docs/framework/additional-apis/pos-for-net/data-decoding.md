@@ -3,7 +3,7 @@ title: Data Decoding
 description: Data Decoding (POS for .NET v1.14 SDK Documentation)
 ms.date: 03/03/2014
 ms.topic: how-to
-ms.custom: pos-restored-from-archive
+ms.custom: "pos-restored-from-archive,UpdateFrequency5"
 ---
 
 # Data Decoding (POS for .NET v1.14 SDK Documentation)
@@ -14,7 +14,7 @@ The **ScannerBase** class implements the **ScannerBase.DecodeData** attribute as
 
 ## To implement DecodeScanDataLabel
 
-1. Override the protected, virtual **ScannerBasic** member **DecodeScanDataLable**.
+1. Override the protected, virtual **ScannerBasic** member **DecodeScanDataLabel**.
 
 2. **DecodeScanData** takes an argument, ***scanData***, which contains the complete data buffer. There is no need to cache any additional data in the Service Object code.
 

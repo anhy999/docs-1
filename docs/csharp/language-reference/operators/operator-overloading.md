@@ -1,7 +1,7 @@
 ---
-title: "Operator overloading - C# reference"
-description: "Learn how to overload a C# operator and which C# operators are overloadable."
-ms.date: 07/05/2019
+title: "Operator overloading - Define unary, arithmetic, equality, and comparison operators."
+description: "Learn how to overload a C# operator and which C# operators are overloadable. In general, the unary, arithmetic, equality and comparison operators are overloadable."
+ms.date: 11/28/2022
 f1_keywords: 
   - "operator_CSharpKeyword"
   - operator
@@ -9,7 +9,7 @@ helpviewer_keywords:
   - "operator keyword [C#]"
   - "operator overloading [C#]"
 ---
-# Operator overloading (C# reference)
+# Operator overloading - predefined unary, arithmetic, equality and comparison operators
 
 A user-defined type can overload a predefined C# operator. That is, a type can provide the custom implementation of an operation in case one or both of the operands are of that type. The [Overloadable operators](#overloadable-operators) section shows which C# operators can be overloaded.
 
@@ -38,11 +38,11 @@ The following table shows the operators that can be overloaded:
 
 ## Non overloadable operators
 
-The following table shows the operators that cannot be overloaded:
+The following table shows the operators that can't be overloaded:
 
 | Operators | Alternatives |
 | :---------: | --------------- |
-|[`x && y`](boolean-logical-operators.md#conditional-logical-and-operator-), [<code>x &#124;&#124; y</code>](boolean-logical-operators.md#conditional-logical-or-operator-)| Overload both the [`true`](true-false-operators.md) and [`false`](true-false-operators.md) operators and the [`&`](boolean-logical-operators.md#logical-and-operator-) or [<code>&#124;</code>](boolean-logical-operators.md#logical-or-operator-) operators. For more information, see [User-defined conditional logical operators](~/_csharpstandard/standard/expressions.md#11133-user-defined-conditional-logical-operators).|
+|[`x && y`](boolean-logical-operators.md#conditional-logical-and-operator-), [<code>x &#124;&#124; y</code>](boolean-logical-operators.md#conditional-logical-or-operator-)| Overload both the [`true`](true-false-operators.md) and [`false`](true-false-operators.md) operators and the [`&`](boolean-logical-operators.md#logical-and-operator-) or [<code>&#124;</code>](boolean-logical-operators.md#logical-or-operator-) operators. For more information, see [User-defined conditional logical operators](~/_csharpstandard/standard/expressions.md#12143-user-defined-conditional-logical-operators).|
 |[<code>a&#91;i&#93;</code>](member-access-operators.md#indexer-operator-), [`a?[i]`](member-access-operators.md#null-conditional-operators--and-)|Define an [indexer](../../programming-guide/indexers/index.md).|
 |[`(T)x`](type-testing-and-cast.md#cast-expression)|Define custom type conversions that can be performed by a cast expression. For more information, see [User-defined conversion operators](user-defined-conversion-operators.md).|
 |[`+=`](arithmetic-operators.md#compound-assignment), [`-=`](arithmetic-operators.md#compound-assignment), [`*=`](arithmetic-operators.md#compound-assignment), [`/=`](arithmetic-operators.md#compound-assignment), [`%=`](arithmetic-operators.md#compound-assignment), [`&=`](boolean-logical-operators.md#compound-assignment), [<code>&#124;=</code>](boolean-logical-operators.md#compound-assignment), [`^=`](boolean-logical-operators.md#compound-assignment), [`<<=`](bitwise-and-shift-operators.md#compound-assignment), [`>>=`](bitwise-and-shift-operators.md#compound-assignment), [`>>>=`](bitwise-and-shift-operators.md#compound-assignment)|Overload the corresponding binary operator. For example, when you overload the binary `+` operator, `+=` is implicitly overloaded.|
@@ -52,12 +52,11 @@ The following table shows the operators that cannot be overloaded:
 
 For more information, see the following sections of the [C# language specification](~/_csharpstandard/standard/README.md):
 
-- [Operator overloading](~/_csharpstandard/standard/expressions.md#1143-operator-overloading)
-- [Operators](~/_csharpstandard/standard/classes.md#1410-operators)
+- [Operator overloading](~/_csharpstandard/standard/expressions.md#1243-operator-overloading)
+- [Operators](~/_csharpstandard/standard/classes.md#1510-operators)
 
 ## See also
 
-- [C# reference](../index.md)
 - [C# operators and expressions](index.md)
 - [User-defined conversion operators](user-defined-conversion-operators.md)
 - [Design guidelines - Operator overloads](../../../standard/design-guidelines/operator-overloads.md)

@@ -1,8 +1,9 @@
 ---
 title: Deploy Orleans to Azure App Service
 description: Learn how to deploy an Orleans shopping cart app to Azure App Service.
-ms.date: 05/02/2022
+ms.date: 10/01/2024
 ms.topic: tutorial
+ms.custom: devx-track-bicep
 ---
 
 # Deploy Orleans to Azure App Service
@@ -29,7 +30,7 @@ In this tutorial, you learn how to:
 
 - A [GitHub account](https://github.com/join)
 - [Read an introduction to Orleans](../overview.md)
-- The [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet)
+- The [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet)
 - The [Azure CLI](/cli/azure/install-azure-cli)
 - A .NET integrated development environment (IDE)
   - Feel free to use [Visual Studio](https://visualstudio.microsoft.com) or [Visual Studio Code](https://code.visualstudio.com)
@@ -111,6 +112,47 @@ When items are in your cart, you can view them and change their quantity, and ev
 > [!IMPORTANT]
 > When this app runs locally, in a development environment, the app will use localhost clustering, in-memory storage, and a local silo. It also seeds the inventory with fake data that is automatically generated using the [Bogus NuGet](https://www.nuget.org/packages/bogus) package. This is all intentional to demonstrate the functionality.
 
+## Deployment overview
+
+Orleans applications are designed to scale up and scale out efficiently. To accomplish this, instances of your application communicate directly with each other via TCP sockets and therefore Orleans requires network connectivity between silos. Azure App Service supports this requirement via [virtual network integration](/azure/app-service/overview-vnet-integration) and additional configuration instructing App Service to allocate private network ports for your app instances.
+
+When deploying Orleans to Azure App Service, we need to take the following actions to ensure that hosts can communicate with eachother:
+
+- Enable virtual network integration by following the [Enable integration with an Azure virtual network](/azure/app-service/configure-vnet-integration-enable) guide.
+- Configure your app with private ports using the Azure CLI as described in the [Configure private port count using Azure CLI](#configure-private-port-count-using-azure-cli) section. The Bicep template in the [Explore the Bicep templates](#explore-the-bicep-templates) section below shows how to configure the setting via Bicep.
+- If deploying to Linux, ensure that your hosts are listening on all IP addresses as described in the [Configure host networking](#configure-host-networking) section.
+
+### Configure private port count using Azure CLI
+
+```azurecli
+az webapp config set -g '<resource-group-name>' --subscription '<subscription-id>' -n '<app-service-app-name>' --generic-configurations '{\"vnetPrivatePortsCount\": "2"}'
+```
+
+### Configure host networking
+
+Once Azure App Service has been configured with virtual network (VNet) integration and configured to provide application instances with at least 2 private ports each, two additional environment variables will be provided to your app processes: `WEBSITE_PRIVATE_IP` and `WEBSITE_PRIVATE_PORTS`. These variables provide two important pieces of information:
+
+- Which IP address other hosts in your virtual network can use to contact a given app instance; and
+- Which ports on that IP address will be routed to that app instance
+
+The `WEBSITE_PRIVATE_IP` variable specifies an IP which is routable from the VNet, but not necessarily an IP address which your app instance can directly bind to. For this reason, you should instruct your host to bind to all internal addresses by passing `listenOnAnyHostAddress: true` to the `ConfigureEndpoints` method call, as in the following example which configures an `ISiloBuilder` instance to consume the injected environment variables and to listen on the correct interfaces:
+
+```csharp
+var endpointAddress = IPAddress.Parse(builder.Configuration["WEBSITE_PRIVATE_IP"]!);
+var strPorts = builder.Configuration["WEBSITE_PRIVATE_PORTS"]!.Split(',');
+if (strPorts.Length < 2)
+{
+    throw new Exception("Insufficient private ports configured.");
+}
+
+var (siloPort, gatewayPort) = (int.Parse(strPorts[0]), int.Parse(strPorts[1]));
+
+siloBuilder
+    .ConfigureEndpoints(endpointAddress, siloPort, gatewayPort, listenOnAnyHostAddress: true)
+```
+
+The above code is present in the [Azure Samples: Orleans Cluster on Azure App Service](https://github.com/Azure-Samples/Orleans-Cluster-on-Azure-App-Service) repository, too, so you can see it in the context of the rest of the host configuration.
+
 ## Deploy to Azure App Service
 
 A typical Orleans application consists of a cluster of server processes (silos) where grains live, and a set of client processes, usually web servers, that receive external requests, turn them into grain method calls and return results. Hence, the first thing one needs to do to run an Orleans application is to start a cluster of silos. For testing purposes, a cluster can consist of a single silo.
@@ -156,10 +198,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup .NET 6.0
+    - name: Setup .NET 8.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
 
     - name: .NET publish shopping cart app
       run: dotnet publish ./Silo/Orleans.ShoppingCart.Silo.csproj --configuration Release
@@ -168,7 +210,7 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
+
     - name: Flex bicep
       run: |
         az deployment group create \
@@ -184,6 +226,14 @@ jobs:
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
           --clean true --restart true \
           --type zip --src-path silo.zip --debug
+
+    - name: Staging deploy
+      run: |
+        az webapp deploy --name ${{ env.UNIQUE_APP_NAME }} \
+          --slot ${{ env.UNIQUE_APP_NAME }}stg \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
+          --clean true --restart true \
+          --type zip --src-path silo.zip --debug
 ```
 
 The preceding GitHub workflow will:
@@ -192,6 +242,7 @@ The preceding GitHub workflow will:
 - Login to Azure using the credentials from the [Create a service principal](#create-a-service-principal) step.
 - Evaluate the _main.bicep_ file and start a deployment group using [az deployment group create](/cli/azure/deployment/group#az-deployment-group-create).
 - Deploy the _silo.zip_ file to Azure App Service using [az webapp deploy](/cli/azure/webapp#az-webapp-deploy).
+  - An additional deployment to staging is also configured.
 
 The workflow is triggered by a push to the _main_ branch. For more information, see [GitHub Actions and .NET](../../devops/github-actions-overview.md).
 
@@ -252,7 +303,8 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '172.17.0.0/16'
+        '172.17.0.0/16',
+        '192.168.0.0/16'
       ]
     }
     subnets: [
@@ -260,6 +312,20 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
         name: 'default'
         properties: {
           addressPrefix: '172.17.0.0/24'
+          delegations: [
+            {
+              name: 'delegation'
+              properties: {
+                serviceName: 'Microsoft.Web/serverFarms'
+              }
+            }
+          ]
+        }
+      }
+      {
+        name: 'staging'
+        properties: {
+          addressPrefix: '192.168.0.0/24'
           delegations: [
             {
               name: 'delegation'
@@ -280,6 +346,7 @@ module siloModule 'app-service.bicep' = {
     appName: appName
     location: location
     vnetSubnetId: vnet.properties.subnets[0].id
+    stagingSubnetId: vnet.properties.subnets[1].id
     appInsightsConnectionString: logsModule.outputs.appInsightsConnectionString
     appInsightsInstrumentationKey: logsModule.outputs.appInsightsInstrumentationKey
     storageConnectionString: storageModule.outputs.connectionString
@@ -365,6 +432,7 @@ Finally, the _app-service.bicep_ file defines the Azure App Service resource:
 param appName string
 param location string
 param vnetSubnetId string
+param stagingSubnetId string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param storageConnectionString string
@@ -390,7 +458,7 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
     siteConfig: {
       vnetPrivatePortsCount: 2
       webSocketsEnabled: true
-      netFrameworkVersion: 'v6.0'
+      netFrameworkVersion: 'v8.0'
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -404,29 +472,85 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           name: 'ORLEANS_AZURE_STORAGE_CONNECTION_STRING'
           value: storageConnectionString
         }
+        {
+          name: 'ORLEANS_CLUSTER_ID'
+          value: 'Default'
+        }
       ]
       alwaysOn: true
     }
   }
 }
 
+resource stagingSlot 'Microsoft.Web/sites/slots@2022-03-01' = {
+  name: '${appName}stg'
+  location: location
+  properties: {
+    serverFarmId: appServicePlan.id
+    virtualNetworkSubnetId: stagingSubnetId
+    siteConfig: {
+      http20Enabled: true
+      vnetPrivatePortsCount: 2
+      webSocketsEnabled: true
+      netFrameworkVersion: 'v8.0'
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsightsInstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: appInsightsConnectionString
+        }
+        {
+          name: 'ORLEANS_AZURE_STORAGE_CONNECTION_STRING'
+          value: storageConnectionString
+        }
+        {
+          name: 'ORLEANS_CLUSTER_ID'
+          value: 'Staging'
+        }
+      ]
+      alwaysOn: true
+    }
+  }
+}
+
+resource slotConfig 'Microsoft.Web/sites/config@2021-03-01' = {
+  name: 'slotConfigNames'
+  parent: appService
+  properties: {
+    appSettingNames: [
+      'ORLEANS_CLUSTER_ID'
+    ]
+  }
+}
+
 resource appServiceConfig 'Microsoft.Web/sites/config@2021-03-01' = {
-  name: '${appService.name}/metadata'
+  parent: appService
+  name: 'metadata'
   properties: {
     CURRENT_STACK: 'dotnet'
   }
 }
 ```
 
-This bicep file configures the Azure App Service as a .NET 6 application. Both the `appServicePlan` resource and the `appService` resource are provisioned in the resource group's location. The `appService` resource is configured to use the `S1` SKU, with a capacity of `1`. Additionally, the resource is configured to use the `vnetSubnetId` subnet and to use HTTPS. It also configures the `appInsightsInstrumentationKey` instrumentation key, the `appInsightsConnectionString` connection string, and the `storageConnectionString` connection string. These are used by the shopping cart app.
+This bicep file configures the Azure App Service as a .NET 8 application. Both the `appServicePlan` resource and the `appService` resource are provisioned in the resource group's location. The `appService` resource is configured to use the `S1` SKU, with a capacity of `1`. Additionally, the resource is configured to use the `vnetSubnetId` subnet and to use HTTPS. It also configures the `appInsightsInstrumentationKey` instrumentation key, the `appInsightsConnectionString` connection string, and the `storageConnectionString` connection string. These are used by the shopping cart app.
 
 The aforementioned Visual Studio Code extension for Bicep includes a visualizer. All of these bicep files are visualized as follows:
 
 :::image type="content" source="media/shopping-cart-flexing.png" alt-text="Orleans: Shopping cart sample app bicep provisioning visualizer rendering." lightbox="media/shopping-cart-flexing.png":::
 
+### Staging environments
+
+The deployment infrastructure can deploy to staging environments, which are short-lived, test-centric, and immutable throwaway environments. These environments are very helpful for testing deployments before promoting them to production.
+
+> [!NOTE]
+> If your App Service is running on Windows, each App Service must be on its own separate App Service Plan. Alternatively, to avoid such configuration, you could instead use App Service on Linux, and this problem would be resolved.
+
 ## Summary
 
-As you update the source code and `push` changes to the `main` branch of the repository, the _deploy.yml_ workflow will run. It will provision the resources defined in the bicep files and deploy the application. The application can be expanded upon to include new features, such as authentication, or to support multiple instances of the application. The primary objective of this workflow is to demonstrate the ability to provision and deploy resources in a single step.
+As you update the source code and `push` changes to the `main` branch of the repository, the _deploy.yml_ workflow will run. It will provide the resources defined in the bicep files and deploy the application. The application can be expanded upon to include new features, such as authentication, or to support multiple instances of the application. The primary objective of this workflow is to demonstrate the ability to provision and deploy resources in a single step.
 
 In addition to the visualizer from the bicep extension, the Azure portal resource group page would look similar to the following example after provisioning and deploying the application:
 

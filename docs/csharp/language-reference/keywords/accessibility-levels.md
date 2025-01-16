@@ -1,6 +1,6 @@
 ---
 description: "Accessibility Levels - C# Reference"
-title: "Accessibility Levels - C# Reference"
+title: "Accessibility Levels"
 ms.date: 12/06/2017
 helpviewer_keywords: 
   - "access modifiers [C#], accessibility levels"
@@ -38,7 +38,11 @@ Use the access modifiers, `public`, `protected`, `internal`, or `private`, to sp
 |`struct`|`private`|`public`<br /><br /> `internal`<br /><br /> `private`|  
 
 \* An `interface` member with `private` accessibility must have a default implementation.
-
+  
+> [!NOTE]  
+> If a class or struct is modified with the [`record`](../builtin-types/record.md) keyword modifier, then the same access modifiers are allowed.  
+> Also, with the [`record`](../builtin-types/record.md) modifier the default member accessibility is still `private` both for class and the struct.  
+  
 The accessibility of a nested type depends on its [accessibility domain](./accessibility-domain.md), which is determined by both the declared accessibility of the member and the accessibility domain of the immediately containing type. However, the accessibility domain of a nested type cannot exceed that of the containing type.  
   
 ## C# Language Specification  
@@ -47,8 +51,6 @@ The accessibility of a nested type depends on its [accessibility domain](./acces
   
 ## See also
 
-- [C# Reference](../index.md)
-- [C# Programming Guide](../../programming-guide/index.md)
 - [C# Keywords](./index.md)
 - [Access Modifiers](./access-modifiers.md)
 - [Accessibility Domain](./accessibility-domain.md)

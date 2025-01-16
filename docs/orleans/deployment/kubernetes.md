@@ -1,7 +1,7 @@
 ---
 title: Kubernetes hosting
 description: Learn how to host an Orleans app with Kubernetes.
-ms.date: 03/09/2022
+ms.date: 07/03/2024
 ---
 
 # Kubernetes hosting
@@ -117,23 +117,23 @@ For RBAC-enabled clusters, the Kubernetes service account for the pods may also 
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: pod-reader
+  name: orleans-hosting
 rules:
 - apiGroups: [ "" ]
   resources: ["pods"]
-  verbs: ["get", "watch", "list"]
+  verbs: ["get", "watch", "list", "delete", "patch"]
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: pod-reader-binding
+  name: orleans-hosting-binding
 subjects:
 - kind: ServiceAccount
   name: default
   apiGroup: ''
 roleRef:
   kind: Role
-  name: pod-reader
+  name: orleans-hosting
   apiGroup: ''
 ```
 

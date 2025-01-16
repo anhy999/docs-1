@@ -1,7 +1,7 @@
 ---
 title: Configure ADO.NET providers
 description: Learn how to configure ADO.NET providers in .NET Orleans.
-ms.date: 03/16/2022
+ms.date: 09/10/2024
 ---
 
 # Configure ADO.NET providers
@@ -59,6 +59,8 @@ siloHostBuilder.UseAdoNetClustering(options =>
     options.ConnectionString = connectionString;
 });
 ```
+
+[!INCLUDE [managed-identities](../../../includes/managed-identities.md)]
 
 Where the `ConnectionString` is set to a valid AdoNet Server connection string.
 

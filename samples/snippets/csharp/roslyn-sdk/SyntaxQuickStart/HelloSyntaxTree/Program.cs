@@ -38,7 +38,7 @@ namespace HelloWorld
             // <Snippet3>
             WriteLine($"The tree is a {root.Kind()} node.");
             WriteLine($"The tree has {root.Members.Count} elements in it.");
-            WriteLine($"The tree has {root.Usings.Count} using statements. They are:");
+            WriteLine($"The tree has {root.Usings.Count} using directives. They are:");
             foreach (UsingDirectiveSyntax element in root.Usings)
                 WriteLine($"\t{element.Name}");
             // </Snippet3>
@@ -67,7 +67,7 @@ namespace HelloWorld
             foreach (ParameterSyntax item in mainDeclaration.ParameterList.Parameters)
                 WriteLine($"The type of the {item.Identifier} parameter is {item.Type}.");
             WriteLine($"The body text of the {mainDeclaration.Identifier} method follows:");
-            WriteLine(mainDeclaration.Body.ToFullString());
+            WriteLine(mainDeclaration.Body?.ToFullString());
 
             var argsParameter = mainDeclaration.ParameterList.Parameters[0];
             // </Snippet7>

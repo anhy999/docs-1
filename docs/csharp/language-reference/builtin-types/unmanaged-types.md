@@ -1,6 +1,6 @@
 ---
 description: Learn about unmanaged types in C#
-title: "Unmanaged types - C# reference"
+title: "Unmanaged types"
 ms.date: 09/06/2019
 helpviewer_keywords: 
   - "unmanaged type [C#]"
@@ -9,9 +9,10 @@ helpviewer_keywords:
 
 A type is an **unmanaged type** if it's any of the following types:
 
-- `sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `char`, `float`, `double`, `decimal`, or `bool`
+- `sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `nint`, `nuint`, `char`, `float`, `double`, `decimal`, or `bool`
 - Any [enum](enum.md) type
 - Any [pointer](../unsafe-code.md#pointer-types) type
+- A [tuple](value-tuples.md) whose members are all of an unmanaged type
 - Any user-defined [struct](struct.md) type that contains fields of unmanaged types only.
 
 You can use the [`unmanaged` constraint](../../programming-guide/generics/constraints-on-type-parameters.md#unmanaged-constraint) to specify that a type parameter is a non-pointer, non-nullable unmanaged type.
@@ -26,11 +27,10 @@ A generic struct may be the source of both unmanaged and managed constructed typ
 
 ## C# language specification
 
-For more information, see the [Pointer types](~/_csharpstandard/standard/unsafe-code.md#223-pointer-types) section of the [C# language specification](~/_csharpstandard/standard/README.md).
+For more information, see the [Pointer types](~/_csharpstandard/standard/unsafe-code.md#233-pointer-types) section of the [C# language specification](~/_csharpstandard/standard/README.md).
 
 ## See also
 
-- [C# reference](../index.md)
 - [Pointer types](../unsafe-code.md#pointer-types)
 - [Memory and span-related types](../../../standard/memory-and-spans/index.md)
 - [sizeof operator](../operators/sizeof.md)

@@ -1,7 +1,7 @@
 ---
-title: "Pointer related operators - C# reference"
-description: "Learn about C# operators that you can use when working with pointers."
-ms.date: 05/20/2019
+title: "Pointer related operators - access memory and dereference memory locations"
+description: "Learn about C# operators that you can use when working with pointers. You use these operators to access memory, index memory locations and dereference the storage at a memory location"
+ms.date: 11/28/2022
 author: pkulikov
 f1_keywords: 
   - "->_CSharpKeyword"
@@ -21,9 +21,11 @@ helpviewer_keywords:
   - "pointer decrement [C#]"
   - "pointer comparison [C#]"
 ---
-# Pointer related operators (C# reference)
+# Pointer related operators - take the address of variables, dereference storage locations, and access memory locations
 
-You can use the following operators to work with pointers:
+The pointer operators enable you to take the address of a variable (`&`), dereference a pointer (`*`), compare pointer values, and add or subtract pointers and integers.
+
+You use the following operators to work with pointers:
 
 - Unary [`&` (address-of)](#address-of-operator-) operator: to get the address of a variable
 - Unary [`*` (pointer indirection)](#pointer-indirection-operator-) operator: to obtain the variable pointed by a pointer
@@ -48,7 +50,7 @@ The operand of the `&` operator must be a fixed variable. *Fixed* variables are 
 
 You can't get the address of a constant or a value.
 
-For more information about fixed and movable variables, see the [Fixed and moveable variables](~/_csharpstandard/standard/unsafe-code.md#224-fixed-and-moveable-variables) section of the [C# language specification](~/_csharpstandard/standard/README.md).
+For more information about fixed and movable variables, see the [Fixed and moveable variables](~/_csharpstandard/standard/unsafe-code.md#234-fixed-and-moveable-variables) section of the [C# language specification](~/_csharpstandard/standard/README.md).
 
 The binary `&` operator computes the [logical AND](boolean-logical-operators.md#logical-and-operator-) of its Boolean operands or the [bitwise logical AND](bitwise-and-shift-operators.md#logical-and-operator-) of its integral operands.
 
@@ -58,7 +60,7 @@ The unary pointer indirection operator `*` obtains the variable to which its ope
 
 [!code-csharp[pointer indirection](snippets/shared/PointerOperators.cs#PointerIndirection)]
 
-You cannot apply the `*` operator to an expression of type `void*`.
+You can't apply the `*` operator to an expression of type `void*`.
 
 The binary `*` operator computes the [product](arithmetic-operators.md#multiplication-operator-) of its numeric operands.
 
@@ -80,7 +82,7 @@ The following example demonstrates the usage of the `->` operator:
 
 [!code-csharp[pointer member access](snippets/shared/PointerOperators.cs#MemberAccess)]
 
-You cannot apply the `->` operator to an expression of type `void*`.
+You can't apply the `->` operator to an expression of type `void*`.
 
 ## Pointer element access operator []
 
@@ -95,7 +97,7 @@ In the preceding example, a [`stackalloc` expression](stackalloc.md) allocates a
 > [!NOTE]
 > The pointer element access operator doesn't check for out-of-bounds errors.
 
-You cannot use `[]` for pointer element access with an expression of type `void*`.
+You can't use `[]` for pointer element access with an expression of type `void*`.
 
 You can also use the `[]` operator for [array element or indexer access](member-access-operators.md#indexer-operator-).
 
@@ -107,7 +109,7 @@ You can perform the following arithmetic operations with pointers:
 - Subtract two pointers
 - Increment or decrement a pointer
 
-You cannot perform those operations with pointers of type `void*`.
+You can't perform those operations with pointers of type `void*`.
 
 For information about supported arithmetic operations with numeric types, see [Arithmetic operators](arithmetic-operators.md).
 
@@ -144,7 +146,7 @@ The following example demonstrates the behavior of both postfix and prefix incre
 
 ## Pointer comparison operators
 
-You can use the `==`, `!=`, `<`, `>`, `<=`, and `>=` operators to compare operands of any pointer type, including `void*`. Those operators compare the addresses given by the two operands as if they were unsigned integers.
+You can use the `==`, `!=`, `<`, `>`, `<=`, and `>=` operators to compare operands of any pointer type, including `void*`. Those operators compare the addresses given by the two operands as if they're unsigned integers.
 
 For information about the behavior of those operators for operands of other types, see the [Equality operators](equality-operators.md) and [Comparison operators](comparison-operators.md) articles.
 
@@ -164,24 +166,23 @@ For the complete list of C# operators ordered by precedence level, see the [Oper
 
 ## Operator overloadability
 
-A user-defined type cannot overload the pointer related operators `&`, `*`, `->`, and `[]`.
+A user-defined type can't overload the pointer related operators `&`, `*`, `->`, and `[]`.
 
 ## C# language specification
 
 For more information, see the following sections of the [C# language specification](~/_csharpstandard/standard/README.md):
 
-- [Fixed and moveable variables](~/_csharpstandard/standard/unsafe-code.md#224-fixed-and-moveable-variables)
-- [The address-of operator](~/_csharpstandard/standard/unsafe-code.md#2265-the-address-of-operator)
-- [Pointer indirection](~/_csharpstandard/standard/unsafe-code.md#2262-pointer-indirection)
-- [Pointer member access](~/_csharpstandard/standard/unsafe-code.md#2263-pointer-member-access)
-- [Pointer element access](~/_csharpstandard/standard/unsafe-code.md#2264-pointer-element-access)
-- [Pointer arithmetic](~/_csharpstandard/standard/unsafe-code.md#2267-pointer-arithmetic)
-- [Pointer increment and decrement](~/_csharpstandard/standard/unsafe-code.md#2266-pointer-increment-and-decrement)
-- [Pointer comparison](~/_csharpstandard/standard/unsafe-code.md#2268-pointer-comparison)
+- [Fixed and moveable variables](~/_csharpstandard/standard/unsafe-code.md#234-fixed-and-moveable-variables)
+- [The address-of operator](~/_csharpstandard/standard/unsafe-code.md#2365-the-address-of-operator)
+- [Pointer indirection](~/_csharpstandard/standard/unsafe-code.md#2362-pointer-indirection)
+- [Pointer member access](~/_csharpstandard/standard/unsafe-code.md#2363-pointer-member-access)
+- [Pointer element access](~/_csharpstandard/standard/unsafe-code.md#2364-pointer-element-access)
+- [Pointer arithmetic](~/_csharpstandard/standard/unsafe-code.md#2367-pointer-arithmetic)
+- [Pointer increment and decrement](~/_csharpstandard/standard/unsafe-code.md#2366-pointer-increment-and-decrement)
+- [Pointer comparison](~/_csharpstandard/standard/unsafe-code.md#2368-pointer-comparison)
 
 ## See also
 
-- [C# reference](../index.md)
 - [C# operators and expressions](index.md)
 - [Unsafe code, pointer types, and function pointers](../unsafe-code.md)
 - [unsafe keyword](../keywords/unsafe.md)

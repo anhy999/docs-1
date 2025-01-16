@@ -1,44 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using System.Threading;
-//<snippet14>
 using System.Activities.DurableInstancing;
-//</snippet14>
+using System.Collections.Generic;
+using System.Threading;
+
 namespace WorkflowConsoleApplication1
 {
     class ExtraSnippets
     {
+        Activity _wf = new DynamicActivity();
+
         void Snippet2()
         {
+
             //<snippet2>
-            WorkflowInvoker.Invoke(new Workflow1());
+            WorkflowInvoker.Invoke(_wf);
             //</snippet2>
         }
 
         void Snippet4()
         {
-
             //<snippet4>
             AutoResetEvent syncEvent = new AutoResetEvent(false);
 
             WorkflowApplication wfApp =
-                new WorkflowApplication(new Workflow1());
+                new WorkflowApplication(_wf);
 
-            wfApp.Completed = delegate(WorkflowApplicationCompletedEventArgs e)
+            wfApp.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {
                 syncEvent.Set();
             };
 
-            wfApp.Aborted = delegate(WorkflowApplicationAbortedEventArgs e)
+            wfApp.Aborted = delegate (WorkflowApplicationAbortedEventArgs e)
             {
                 Console.WriteLine(e.Reason);
                 syncEvent.Set();
             };
 
-            wfApp.OnUnhandledException = delegate(WorkflowApplicationUnhandledExceptionEventArgs e)
+            wfApp.OnUnhandledException = delegate (WorkflowApplicationUnhandledExceptionEventArgs e)
             {
                 Console.WriteLine(e.UnhandledException.ToString());
                 return UnhandledExceptionAction.Terminate;
@@ -54,17 +53,15 @@ namespace WorkflowConsoleApplication1
 
         void Step4Snippets()
         {
-            AutoResetEvent idleEvent = new AutoResetEvent(false);
+            AutoResetEvent idleEvent = new(false);
 
-            //<snippet13>
-            const string connectionString = "Server=.\\SQLEXPRESS;Initial Catalog=Persistence;Integrated Security=SSPI";
-            //</snippet13>
+            const string connectionString = "...";
 
             var inputs = new Dictionary<string, object>() { { "MaxNumber", 100 } };
 
             //<snippet15>
             WorkflowApplication wfApp =
-                new WorkflowApplication(new Workflow1(), inputs);
+                new WorkflowApplication(_wf, inputs);
 
             SqlWorkflowInstanceStore store = new SqlWorkflowInstanceStore(connectionString);
             wfApp.InstanceStore = store;
@@ -77,7 +74,7 @@ namespace WorkflowConsoleApplication1
             //    idleEvent.Set();
             //};
 
-            wfApp.PersistableIdle = delegate(WorkflowApplicationIdleEventArgs e)
+            wfApp.PersistableIdle = delegate (WorkflowApplicationIdleEventArgs e)
             {
                 idleEvent.Set();
                 return PersistableIdleAction.Persist;

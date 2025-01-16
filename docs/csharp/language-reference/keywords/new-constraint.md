@@ -1,6 +1,6 @@
 ---
 description: "new constraint - C# Reference"
-title: "new constraint - C# Reference"
+title: "new constraint"
 ms.date: 07/20/2015
 helpviewer_keywords: 
   - "new constraint keyword [C#]"
@@ -24,11 +24,9 @@ You can also use the `new` keyword to [create an instance of a type](../operator
 
 ## C# language specification
 
-For more information, see the [Type parameter constraints](~/_csharpstandard/standard/classes.md#1425-type-parameter-constraints) section of the [C# language specification](~/_csharpstandard/standard/README.md).
+For more information, see the [Type parameter constraints](~/_csharpstandard/standard/classes.md#1525-type-parameter-constraints) section of the [C# language specification](~/_csharpstandard/standard/README.md).
 
 ## See also
 
-- [C# Reference](../index.md)
-- [C# Programming Guide](../../programming-guide/index.md)
 - [C# Keywords](index.md)
 - [Generics](../../fundamentals/types/generics.md)

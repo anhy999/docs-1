@@ -3,7 +3,7 @@ title: Plug and Play XML Configuration
 description: Plug and Play XML Configuration (POS for .NET v1.14 SDK Documentation)
 ms.date: 03/03/2014
 ms.topic: how-to
-ms.custom: pos-restored-from-archive
+ms.custom: "pos-restored-from-archive,UpdateFrequency5"
 ---
 
 # Plug and Play XML Configuration (POS for .NET v1.14 SDK Documentation)
@@ -33,7 +33,7 @@ The example shows a typical XML Plug and Play configuration file.
 </PointOfServiceConfig>
 ```
 
-## Hardeware ID Precedence
+## Hardware ID Precedence
 
 If the **Override** attribute on the **ServiceObject** node is set, then the device association specified in the XML takes precedence, and any **HardwareId** attribute on the Service Object will be discarded.
 

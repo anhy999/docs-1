@@ -1,7 +1,7 @@
 ---
 title: Using NoSQL databases as a persistence infrastructure
 description: Understand the use of NoSql databases in general, and Azure Cosmos DB in particular, as an option to implement persistence.
-ms.date: 06/23/2021
+ms.date: 09/10/2024
 ---
 # Use NoSQL databases as a persistence infrastructure
 
@@ -25,8 +25,8 @@ For instance, the following JSON code is a sample implementation of an order agg
 
 ```json
 {
-    "id": "2017001",
-    "orderDate": "2/25/2017",
+    "id": "2024001",
+    "orderDate": "2/25/2024",
     "buyerId": "1234567",
     "address": [
         {
@@ -38,9 +38,9 @@ For instance, the following JSON code is a sample implementation of an order agg
         }
     ],
     "orderItems": [
-        {"id": 20170011, "productId": "123456", "productName": ".NET T-Shirt",
+        {"id": 20240011, "productId": "123456", "productName": ".NET T-Shirt",
         "unitPrice": 25, "units": 2, "discount": 0},
-        {"id": 20170012, "productId": "123457", "productName": ".NET Mug",
+        {"id": 20240012, "productId": "123457", "productName": ".NET Mug",
         "unitPrice": 15, "units": 1, "discount": 0}
     ]
 }
@@ -65,7 +65,7 @@ When you use a C\# model to implement the aggregate to be used by the Azure Cosm
 
 Order orderAggregate = new Order
 {
-    Id = "2017001",
+    Id = "2024001",
     OrderDate = new DateTime(2005, 7, 1),
     BuyerId = "1234567",
     PurchaseOrderNumber = "PO18009186470"
@@ -84,7 +84,7 @@ orderAggregate.UpdateAddress(address);
 
 OrderItem orderItem1 = new OrderItem
 {
-    Id = 20170011,
+    Id = 20240011,
     ProductId = "123456",
     ProductName = ".NET T-Shirt",
     UnitPrice = 25,
@@ -273,8 +273,9 @@ services:
     environment:
       # Other settings
       - ConnectionString=${ESHOP_AZURE_COSMOSDB:-mongodb://nosqldata}
-
 ```
+
+[!INCLUDE [managed-identities](../../../includes/managed-identities.md)]
 
 The `ConnectionString` environment variable is resolved this way: If the `ESHOP_AZURE_COSMOSDB` global variable is defined in the `.env` file with the Azure Cosmos DB connection string, it will use it to access the Azure Cosmos DB database in the cloud. If it’s not defined, it will take the `mongodb://nosqldata` value and use the development MongoDB container.
 
@@ -327,9 +328,6 @@ services:
 
 - **Connect a MongoDB application to Azure Cosmos DB**  \
   [https://learn.microsoft.com/azure/cosmos-db/connect-mongodb-account](/azure/cosmos-db/connect-mongodb-account)
-
-- **The Cosmos DB Emulator Docker image (Windows Container)**  \
-  <https://hub.docker.com/r/microsoft/azure-cosmosdb-emulator/>
 
 - **The MongoDB Docker image (Linux and Windows Container)**  \
   <https://hub.docker.com/_/mongo/>

@@ -1,7 +1,7 @@
 ---
-title: "Type-testing operators and cast expression - C# reference"
-description: "Learn about C# operators that you can use to check the type of an expression result and convert it to another type if necessary."
-ms.date: 11/08/2021
+title: "Type-testing operators and cast expressions test the runtime type of an object"
+description: "The `is` and `as` operators test the type of an object. The `typeof` keyword returns the type of a variable. Casts try to convert an object to a variable of a different type."
+ms.date: 11/28/2022
 author: pkulikov
 f1_keywords: 
   - "is_CSharpKeyword"
@@ -21,14 +21,9 @@ helpviewer_keywords:
   - "() operator [C#]"
   - "typeof operator [C#]"
 ---
-# Type-testing operators and cast expression (C# reference)
+# Type-testing operators and cast expressions - `is`, `as`, `typeof` and casts
 
-You can use the following operators and expressions to perform type checking or type conversion:
-
-- [is operator](#is-operator): Check if the run-time type of an expression is compatible with a given type
-- [as operator](#as-operator): Explicitly convert an expression to a given type if its run-time type is compatible with that type
-- [cast expression](#cast-expression): Perform an explicit conversion
-- [typeof operator](#typeof-operator): Obtain the <xref:System.Type?displayProperty=nameWithType> instance for a type
+These operators and expressions perform type checking or type conversion. The `is` [operator](#is-operator) checks if the run-time type of an expression is compatible with a given type. The `as` [operator](#as-operator) explicitly converts an expression to a given type if its run-time type is compatible with that type. [Cast expressions](#cast-expression) perform an explicit conversion to a target type. The `typeof` [operator](#typeof-operator) obtains the <xref:System.Type?displayProperty=nameWithType> instance for a type.
 
 ## is operator
 
@@ -142,7 +137,7 @@ Use the `typeof` operator to check if the run-time type of the expression result
 
 ## Operator overloadability
 
-The `is`, `as`, and `typeof` operators cannot be overloaded.
+The `is`, `as`, and `typeof` operators can't be overloaded.
 
 A user-defined type can't overload the `()` operator, but can define custom type conversions that can be performed by a cast expression. For more information, see [User-defined conversion operators](user-defined-conversion-operators.md).
 
@@ -150,14 +145,13 @@ A user-defined type can't overload the `()` operator, but can define custom type
 
 For more information, see the following sections of the [C# language specification](~/_csharpstandard/standard/README.md):
 
-- [The is operator](~/_csharpstandard/standard/expressions.md#111111-the-is-operator)
-- [The as operator](~/_csharpstandard/standard/expressions.md#111112-the-as-operator)
-- [Cast expressions](~/_csharpstandard/standard/expressions.md#1187-cast-expressions)
-- [The typeof operator](~/_csharpstandard/standard/expressions.md#11716-the-typeof-operator)
+- [The is operator](~/_csharpstandard/standard/expressions.md#121212-the-is-operator)
+- [The as operator](~/_csharpstandard/standard/expressions.md#121213-the-as-operator)
+- [Cast expressions](~/_csharpstandard/standard/expressions.md#1297-cast-expressions)
+- [The typeof operator](~/_csharpstandard/standard/expressions.md#12818-the-typeof-operator)
 
 ## See also
 
-- [C# reference](../index.md)
 - [C# operators and expressions](index.md)
 - [How to safely cast by using pattern matching and the is and as operators](../../fundamentals/tutorials/safely-cast-using-pattern-matching-is-and-as-operators.md)
 - [Generics in .NET](../../../standard/generics/index.md)

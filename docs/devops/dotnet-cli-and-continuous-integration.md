@@ -1,22 +1,22 @@
 ---
 title: Use the .NET SDK in Continuous Integration (CI) environments
-description: Learn how to use the .NET SDK and its tools on the build server with continuous integration.
+description: Learn how to use the .NET SDK and its tools on a build server with continuous integration.
 ms.date: 07/13/2022
 ---
 
-# Use the .NET SDK in Continuous Integration (CI) environments
+# Use the .NET SDK in continuous integration (CI) environments
 
-This article outlines how to use the .NET SDK and its tools on a build server. The .NET toolset works both interactively, where a developer types commands at a command prompt, and automatically, where a Continuous Integration (CI) server runs a build script. The commands, options, inputs, and outputs are the same, and the only things you supply are a way to acquire the tooling and a system to build your app. This article focuses on scenarios of tool acquisition for CI with recommendations on how to design and structure your build scripts.
+This article outlines how to use the .NET SDK and its tools on a build server. The .NET toolset works both interactively, where a developer types commands at a command prompt, and automatically, where a continuous integration (CI) server runs a build script. The commands, options, inputs, and outputs are the same, and the only things you supply are a way to acquire the tooling and a system to build your app. This article focuses on scenarios of tool acquisition for CI with recommendations on how to design and structure your build scripts.
 
 ## Installation options for CI build servers
 
-If you're using GitHub, the installation is very straightforward. You can rely on GitHub Actions to install the .NET SDK in your workflow. The recommended way to install the .NET SDK in a workflow is with the `actions/setup-net-core-sdk`. For more information, see the [Setup .NET Core SDK](https://github.com/marketplace/actions/setup-net-core-sdk) action in the GitHub marketplace. For examples of how this works, see [Quickstart: Create a build validation GitHub workflow](dotnet-build-github-action.md).
+If you're using GitHub, the installation is straightforward. You can rely on GitHub Actions to install the .NET SDK in your workflow. The recommended way to install the .NET SDK in a workflow is with the `actions/setup-net-core-sdk` action. For more information, see the [Setup .NET Core SDK](https://github.com/marketplace/actions/setup-net-core-sdk) action in the GitHub marketplace. For examples of how this works, see [Quickstart: Create a build validation GitHub workflow](dotnet-build-github-action.md).
 
 ### Native installers
 
 Native installers are available for macOS, Linux, and Windows. The installers require admin (sudo) access to the build server. The advantage of using a native installer is that it installs all of the native dependencies required for the tooling to run. Native installers also provide a system-wide installation of the SDK.
 
-macOS users should use the PKG installers. On Linux, there's a choice of using a feed-based package manager, such as apt-get for Ubuntu or yum for CentOS, or using the packages themselves, DEB or RPM. On Windows, use the MSI installer.
+macOS users should use the PKG installers. On Linux, there's a choice of using a feed-based package manager, such as apt-get for Ubuntu or yum for CentOS Stream, or using the packages themselves, DEB or RPM. On Windows, use the MSI installer.
 
 The latest stable binaries are found at [.NET downloads](https://dotnet.microsoft.com/download). If you wish to use the latest (and potentially unstable) pre-release tooling, use the links provided at the [dotnet/installer GitHub repository](https://github.com/dotnet/installer#installers-and-binaries). For Linux distributions, `tar.gz` archives (also known as `tarballs`) are available; use the installation scripts within the archives to install .NET.
 
@@ -29,7 +29,7 @@ The installer script is automated to run at the start of the build to fetch and 
 > [!NOTE]
 > **Azure DevOps Services**
 >
-> When using the installer script, native dependencies aren't installed automatically. You must install the native dependencies if the operating system doesn't have them. For more information, see [.NET dependencies and requirements](../core/install/windows.md#dependencies).
+> When using the installer script, native dependencies aren't installed automatically. You must install the native dependencies if the operating system doesn't have them. For more information, see [Install .NET on Windows, Linux, and macOS](../core/install/index.yml).
 
 ## CI setup examples
 
@@ -125,11 +125,11 @@ LOCALDOTNET="$INSTALLDIR/dotnet"
 
 You can configure [Travis CI](https://travis-ci.org/) to install the .NET SDK using the `csharp` language and the `dotnet` key. For more information, see the official Travis CI docs on [Building a C#, F#, or Visual Basic Project](https://docs.travis-ci.com/user/languages/csharp/). Note as you access the Travis CI information that the community-maintained `language: csharp` language identifier works for all .NET languages, including F#, and Mono.
 
-Travis CI runs both macOS and Linux jobs in a *build matrix*, where you specify a combination of runtime, environment, and exclusions/inclusions to cover your build combinations for your app. For more information, see the [Customizing the Build](https://docs.travis-ci.com/user/customizing-the-build) article in the Travis CI documentation. The MSBuild-based tools include the LTS and Current runtimes in the package; so by installing the SDK, you receive everything you need to build.
+Travis CI runs both macOS and Linux jobs in a *build matrix*, where you specify a combination of runtime, environment, and exclusions/inclusions to cover the build combinations for your app. For more information, see the [Customizing the Build](https://docs.travis-ci.com/user/customizing-the-build) article in the Travis CI documentation. The MSBuild-based tools include the long-term support (LTS) and standard-term support (STS) runtimes in the package; so by installing the SDK, you receive everything you need to build.
 
 ### AppVeyor
 
-[AppVeyor](https://www.appveyor.com/) installs the .NET 6.0.0 SDK with the `Visual Studio 2022` build worker image. Other build images with different versions of the .NET SDK are available. For more information, see the [appveyor.yml example](https://github.com/dotnet/docs/blob/main/appveyor.yml) and the [Build worker images](https://www.appveyor.com/docs/build-environment/#build-worker-images) article in the AppVeyor docs.
+[AppVeyor](https://www.appveyor.com/) installs the .NET 6 SDK with the `Visual Studio 2022` build worker image. Other build images with different versions of the .NET SDK are available. For more information, see the [Build worker images](https://www.appveyor.com/docs/build-environment/#build-worker-images) article in the AppVeyor docs.
 
 The .NET SDK binaries are downloaded and unzipped in a subdirectory using the install script, and then they're added to the `PATH` environment variable. Add a build matrix to run integration tests with multiple versions of the .NET SDK:
 
@@ -138,17 +138,14 @@ environment:
   matrix:
     - CLI_VERSION: 6.0.7
     - CLI_VERSION: Latest
-
-install:
-  # See appveyor.yml example for install script
 ```
 
 ### Azure DevOps Services
 
 Configure Azure DevOps Services to build .NET projects using one of these approaches:
 
-1. Run the script from the [manual setup step](#manual-setup) using your commands.
-1. Create a build composed of several Azure DevOps Services built-in build tasks that are configured to use .NET tools.
+- Run the script from the [manual setup step](#manual-setup) using your commands.
+- Create a build composed of several Azure DevOps Services built-in build tasks that are configured to use .NET tools.
 
 Both solutions are valid. Using a manual setup script, you control the version of the tools that you receive, since you download them as part of the build. The build is run from a script that you must create. This article only covers the manual option. For more information on composing a build with Azure DevOps Services build tasks, see the [Azure Pipelines](/azure/devops/pipelines/index) documentation.
 
@@ -175,6 +172,9 @@ To use a manual setup script in Azure DevOps Services, create a new build defini
 Most of this document describes how to acquire the .NET tools and configure various CI services without providing information on how to orchestrate, or *actually build*, your code with .NET. The choices on how to structure the build process depend on many factors that can't be covered in a general way here. For more information on orchestrating your builds with each technology, explore the resources and samples provided in the documentation sets of [Travis CI](https://travis-ci.org/), [AppVeyor](https://www.appveyor.com/), and [Azure Pipelines](/azure/devops/pipelines/index).
 
 Two general approaches that you take in structuring the build process for .NET code using the .NET tools are using MSBuild directly or using the .NET command-line commands. Which approach you should take is determined by your comfort level with the approaches and trade-offs in complexity. MSBuild provides you the ability to express your build process as tasks and targets, but it comes with the added complexity of learning MSBuild project file syntax. Using the .NET command-line tools is perhaps simpler, but it requires you to write orchestration logic in a scripting language like `bash` or PowerShell.
+
+> [!TIP]
+> One MSBuild property you'll want to set to `true` is [`ContinuousIntegrationBuild`](../core/project-sdk/msbuild-props.md#continuousintegrationbuild). This property enables settings that only apply to official builds as opposed to local development builds.
 
 ## See also
 

@@ -1,15 +1,14 @@
 ---
-title: "await operator - C# reference"
-description: "Learn about the C# await operator that suspends evaluation of the enclosing async method."
-ms.date: 03/02/2022
+title: "await operator - asynchronously wait for a task to complete"
+description: "The C# `await` operator asynchronously suspends evaluation of the enclosing `async` method."
+ms.date: 07/01/2024
 f1_keywords: 
   - "await_CSharpKeyword"
 helpviewer_keywords: 
   - "await keyword [C#]"
   - "await [C#]"
-ms.assetid: 50725c24-ac76-4ca7-bca1-dd57642ffedb
 ---
-# await operator (C# reference)
+# await operator - asynchronously await for a task to complete
 
 The `await` operator suspends evaluation of the enclosing [async](../keywords/async.md) method until the asynchronous operation represented by its operand completes. When the asynchronous operation completes, the `await` operator returns the result of the operation, if any. When the `await` operator is applied to the operand that represents an already completed operation, it returns the result of the operation immediately without suspension of the enclosing method. The `await` operator doesn't block the thread that evaluates the async method. When the `await` operator suspends the enclosing async method, the control returns to the caller of the method.
 
@@ -17,16 +16,18 @@ In the following example, the <xref:System.Net.Http.HttpClient.GetByteArrayAsync
 
 [!code-csharp[await example](snippets/shared/AwaitOperator.cs)]
 
+The operand of an `await` expression must provide for notification when a task completes. In general, a delegate is invoked when the task completes, either successfully or unsuccessfully. The [`await`](~/_csharpstandard/standard/expressions.md#1298-await-expressions) section of the C# language spec provides the details on how these notifications are implemented.
+
 The preceding example uses the [async `Main` method](../../fundamentals/program-structure/main-command-line.md). For more information, see the [await operator in the Main method](#await-operator-in-the-main-method) section.
 
 > [!NOTE]
-> For an introduction to asynchronous programming, see [Asynchronous programming with async and await](../../programming-guide/concepts/async/index.md). Asynchronous programming with `async` and `await` follows the [task-based asynchronous pattern](../../../standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.md).
+> For an introduction to asynchronous programming, see [Asynchronous programming with async and await](../../asynchronous-programming/index.md). Asynchronous programming with `async` and `await` follows the [task-based asynchronous pattern](../../../standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.md).
 
-You can use the `await` operator only in a method, [lambda expression](lambda-expressions.md), or [anonymous method](delegate-operator.md) that is modified by the [async](../keywords/async.md) keyword. Within an async method, you can't use the `await` operator in the body of a synchronous function, inside the block of a [lock statement](../statements/lock.md), and in an [unsafe](../keywords/unsafe.md) context.
+You can use the `await` operator only in a method, [lambda expression](lambda-expressions.md), or [anonymous method](delegate-operator.md) that is modified by the [async](../keywords/async.md) keyword. Within an async method, you can't use the `await` operator in the body of a synchronous local function, inside the block of a [lock statement](../statements/lock.md), and in an [unsafe](../keywords/unsafe.md) context.
 
-The operand of the `await` operator is usually of one of the following .NET types: <xref:System.Threading.Tasks.Task>, <xref:System.Threading.Tasks.Task%601>, <xref:System.Threading.Tasks.ValueTask>, or <xref:System.Threading.Tasks.ValueTask%601>. However, any awaitable expression can be the operand of the `await` operator. For more information, see the [Awaitable expressions](~/_csharpstandard/standard/expressions.md#11882-awaitable-expressions) section of the [C# language specification](~/_csharpstandard/standard/README.md).
+The operand of the `await` operator is usually of one of the following .NET types: <xref:System.Threading.Tasks.Task>, <xref:System.Threading.Tasks.Task%601>, <xref:System.Threading.Tasks.ValueTask>, or <xref:System.Threading.Tasks.ValueTask%601>. However, any awaitable expression can be the operand of the `await` operator. For more information, see the [Awaitable expressions](~/_csharpstandard/standard/expressions.md#12982-awaitable-expressions) section of the [C# language specification](~/_csharpstandard/standard/README.md).
 
-The type of expression `await t` is `TResult` if the type of expression `t` is <xref:System.Threading.Tasks.Task%601> or <xref:System.Threading.Tasks.ValueTask%601>. If the type of `t` is <xref:System.Threading.Tasks.Task> or <xref:System.Threading.Tasks.ValueTask>, the type of `await t` is `void`. In both cases, if `t` throws an exception, `await t` rethrows the exception. For more information about exception handling, see the [Exceptions in async methods](../keywords/try-catch.md#exceptions-in-async-methods) section of the [try-catch statement](../keywords/try-catch.md) article.
+The type of expression `await t` is `TResult` if the type of expression `t` is <xref:System.Threading.Tasks.Task%601> or <xref:System.Threading.Tasks.ValueTask%601>. If the type of `t` is <xref:System.Threading.Tasks.Task> or <xref:System.Threading.Tasks.ValueTask>, the type of `await t` is `void`. In both cases, if `t` throws an exception, `await t` rethrows the exception.
 
 ## Asynchronous streams and disposables
 
@@ -40,14 +41,14 @@ The [`Main` method](../../fundamentals/program-structure/main-command-line.md), 
 
 ## C# language specification
 
-For more information, see the [Await expressions](~/_csharpstandard/standard/expressions.md#1188-await-expressions) section of the [C# language specification](~/_csharpstandard/standard/README.md).
+For more information, see the [Await expressions](~/_csharpstandard/standard/expressions.md#1298-await-expressions) section of the [C# language specification](~/_csharpstandard/standard/README.md).
 
 ## See also
 
-- [C# reference](../index.md)
 - [C# operators and expressions](index.md)
 - [async](../keywords/async.md)
-- [Task asynchronous programming model](../../programming-guide/concepts/async/task-asynchronous-programming-model.md)
-- [Asynchronous programming](../../async.md)
-- [Walkthrough: accessing the Web by using async and await](../../programming-guide/concepts/async/index.md)
-- [Tutorial: Generate and consume async streams](../../tutorials/generate-consume-asynchronous-stream.md)
+- [Task asynchronous programming model](../../asynchronous-programming/task-asynchronous-programming-model.md)
+- [Asynchronous programming](../../asynchronous-programming/index.md)
+- [Walkthrough: accessing the Web by using async and await](../../asynchronous-programming/async-scenarios.md)
+- [Tutorial: Generate and consume async streams](../../asynchronous-programming/generate-consume-asynchronous-stream.md)
+- [.NET blog: How async/await really works in C#](https://devblogs.microsoft.com/dotnet/how-async-await-really-works/)

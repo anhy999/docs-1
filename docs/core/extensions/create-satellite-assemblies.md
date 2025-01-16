@@ -1,7 +1,7 @@
 ---
 title: Create satellite assemblies
 description: Get started with creating satellite assemblies for .NET apps. A satellite assembly can be easily updated or replaced to provide localized resources.
-ms.date: 05/19/2022
+ms.date: 03/13/2023
 dev_langs:
   - "csharp"
   - "vb"
@@ -93,7 +93,7 @@ For a complete list of options available with *al.exe*, see [Assembly Linker (*a
 > </Project>
 > ```
 >
-> The .NET Core MSBuild task uses *csc.exe* instead of *al.exe* to generate satellite assemblies, by default. For more information, see [Make it easier to opt into "Core" satellite assembly generation](https://github.com/dotnet/msbuild/pull/2726).
+> The .NET Core MSBuild task uses *csc.exe* instead of *al.exe* to generate satellite assemblies, by default. For more information, see [Make it easier to opt in to "Core" satellite assembly generation](https://github.com/dotnet/msbuild/pull/2726).
 
 ## Satellite assemblies example
 

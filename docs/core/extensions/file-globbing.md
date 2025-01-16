@@ -3,7 +3,7 @@ title: File globbing
 author: IEvangelist
 description: Learn how to use file globbing in .NET to match various files with the same partial names, extensions, or segments.
 ms.author: dapine
-ms.date: 11/12/2021
+ms.date: 03/13/2023
 ---
 
 # File globbing in .NET
@@ -91,7 +91,7 @@ The preceding C# code:
 - Calls `Execute` given the `DirectoryInfoWrapper` instance to yield a <xref:Microsoft.Extensions.FileSystemGlobbing.PatternMatchingResult> object.
 
 > [!NOTE]
-> The `DirectoryInfoWrapper` type is defined in the `Microsoft.Extensions.FileSystemGlobbing.Abstractions` namespace, and the `DirectoryInfo` type is defined in the `System.IO` namespace. To avoid unnecessary `using` statements, you can use the provided extension methods.
+> The `DirectoryInfoWrapper` type is defined in the `Microsoft.Extensions.FileSystemGlobbing.Abstractions` namespace, and the `DirectoryInfo` type is defined in the `System.IO` namespace. To avoid unnecessary `using` directives, you can use the provided extension methods.
 
 There is another extension method that yields an `IEnumerable<string>` representing the matching files:
 
@@ -146,7 +146,7 @@ The additional `Match` overloads work in similar ways.
 The patterns that are specified in the `AddExclude` and `AddInclude` methods can use the following formats to match multiple files or directories.
 
 - Exact directory or file name
-  
+
   - `some-file.txt`
   - `path/to/file.txt`
 
@@ -169,6 +169,7 @@ The patterns that are specified in the `AddExclude` and `AddInclude` methods can
     | Value | Description |
     | --- | --- |
     | `**/*` | All files in any subdirectory. |
+    | `dir/` | All files in any subdirectory under 'dir/'. |
     | `dir/**/*` | All files in any subdirectory under 'dir/'. |
 
 - Relative paths.

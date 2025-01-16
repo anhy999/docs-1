@@ -36,6 +36,10 @@ Each version of the .NET SDK is available in both x86 and x64 architecture. The 
 
 If the version you need isn't installed, find the one you need at the [.NET Downloads](https://dotnet.microsoft.com/download/dotnet) page.
 
+### Visual Studio version
+
+The .NET SDK might have been installed with Visual Studio 2022, so upgrading to a later version of Visual Studio might install a later .NET SDK and resolve this error. For more information, see [Update Visual Studio](/visualstudio/install/update-visual-studio).
+
 ## Preview not enabled
 
 If you have a preview installed of the requested .NET SDK version, you also need to set the option to enable previews in Visual Studio. Go to **Tools** > **Options** > **Environment** > **Preview Features**, and make sure that **Use previews of the .NET Core SDK** is checked.
@@ -54,7 +58,7 @@ Check the MSBuildSDKPath environment variable. This optional environment variabl
 
 ## global.json file
 
-Check for a *global.json* file in the root folder in your project and up the directory chain to the root of the volume, since it can be anywhere in the folder structure. If it contains an SDK version, delete the `sdk` node and all its children, or update it to the desired newer .NET Core version.
+Check for a *global.json* file in the root folder in your project and in your solution, and up the directory chain to the root of the volume, since it can be anywhere in the folder structure. If it contains an SDK version, delete the `sdk` node and all its children, or update it to the desired newer .NET Core version.
 
 ```json
 {

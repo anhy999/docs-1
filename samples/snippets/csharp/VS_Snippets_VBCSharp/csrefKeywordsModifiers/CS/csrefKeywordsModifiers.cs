@@ -759,7 +759,7 @@ namespace csrefKeywordsModifiers
     //<snippet26>
     class MyBaseClass
     {
-        // virtual auto-implemented property. Overrides can only
+        // virtual automatically implemented property. Overrides can only
         // provide specialized behavior if they implement get and set accessors.
         public virtual string Name { get; set; }
 
@@ -776,7 +776,7 @@ namespace csrefKeywordsModifiers
     {
         private string _name;
 
-        // Override auto-implemented property with ordinary property
+        // Override automatically implemented property with ordinary property
         // to provide specialized accessor behavior.
         public override string Name
         {
@@ -798,4 +798,49 @@ namespace csrefKeywordsModifiers
         }
     }
     //</snippet26>
+
+    public class AbstractExercise3
+    {
+        //<snippet27>
+        public abstract class Shape
+        {
+            public string Color { get; set; }
+
+            // Constructor of the abstract class
+            protected Shape(string color)
+            {
+                Color = color;
+                Console.WriteLine("Created a shape with color {color}.");
+            }
+
+            // Abstract method that must be implemented by derived classes
+            public abstract double CalculateArea();
+        }
+
+        public class Square : Shape
+        {
+            public double Side { get; set; }
+
+            // Constructor of the derived class calling the base class constructor
+            public Square(string color, double side) : base(color)
+            {
+                Side = side;
+            }
+
+            public override double CalculateArea()
+            {
+                return Side * Side;
+            }
+        }
+
+        public class Program
+        {
+            public static void Main(string[] args)
+             {
+                    Square square = new Square("red", 5);
+                    Console.WriteLine("Area of the square: {square.CalculateArea()}");            
+             }
+        }
+        //</snippet27>
+    } 
 }

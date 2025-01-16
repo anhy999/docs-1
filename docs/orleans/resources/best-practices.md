@@ -1,7 +1,7 @@
 ---
 title: Best practices in Orleans
 description: Learn some of the best practices in Orleans for .NET Orleans app development.
-ms.date: 03/21/2022
+ms.date: 07/03/2024
 ---
 
 # Best practices in Orleans
@@ -67,7 +67,9 @@ Orleans is not the best fit when:
 
     ```csharp
     var x = await bar.Foo();
+
     var y = DoSomething(x);
+
     return y;
     ```
 
@@ -75,11 +77,13 @@ Orleans is not the best fit when:
 
     ```csharp
     var tasks = new List<Task>();
+
     foreach (var grain in grains)
     {
         tasks.Add(grain.Foo());
     }
     await Task.WhenAll(tasks);
+
     DoMoreWork();
     ```
 
@@ -95,7 +99,7 @@ Orleans is not the best fit when:
   - Deadlock can occur due to call cycles.
     - Examples:
       - The grain calls itself.
-      - Grains A calls B while C is also calling A (A -> B -> C -> A).
+      - Grain A calls B which calls C which in turn is calling A (A -> B -> C -> A).
       - Grain A calls Grain B as Grain B is calling Grain A (A -> B -> A).
   - Timeouts are used to automatically break deadlocks.
   - <xref:Orleans.Concurrency.ReentrantAttribute> can be used to allow the grain class reentrant.
@@ -214,7 +218,7 @@ Scaling out and in:
 Testing:
 
 - `Microsoft.Orleans.TestingHost` NuGet package contains <xref:Orleans.TestingHost.TestCluster> which can be used to create an in-memory cluster, comprised of two silos by default, which can be used to test grains.
-- Additional information can be found [here](../tutorials-and-samples/testing.md).
+- For more information, see [Unit testing with Orleans](../implementation/testing.md).
 
 Troubleshooting:
 

@@ -256,6 +256,10 @@
             "redirect_url": "/dotnet/visual-basic/language-reference/error-messages/bc31098"
         },
         {
+            "source_path_from_root": "/docs/visual-basic/language-reference/error-messages/late-bound-resolution;-runtime-errors-could-occur.md",
+            "redirect_url": "/dotnet/visual-basic/language-reference/error-messages/late-bound-resolution-runtime-errors-could-occur"
+        },
+        {
             "source_path_from_root": "/docs/visual-basic/language-reference/queries/queries.md",
             "redirect_url": "/dotnet/visual-basic/language-reference/queries/index",
             "redirect_document_id": true
@@ -1258,6 +1262,10 @@
         {
             "source_path_from_root": "/docs/visual-basic/programming-guide/concepts/threading/walkthrough-multithreading-with-the-backgroundworker-component.md",
             "redirect_url": "/dotnet/api/system.componentmodel.backgroundworker"
+        },
+        {
+            "source_path_from_root": "/docs/visual-basic/programming-guide/concepts/serialization/walkthrough-persisting-an-object-in-visual-studio.md",
+            "redirect_url": "/dotnet/visual-basic/programming-guide/concepts/serialization/"
         },
         {
             "source_path_from_root": "/docs/visual-basic/programming-guide/language-features/xml/how-to-enable-xml-intellisense.md",

@@ -1,7 +1,7 @@
 ---
 title: Install localized IntelliSense files
-description: Learn how to set up your development machine to use localized IntelliSense files for .NET 5 projects (including .NET Core) in Visual Studio.
-ms.date: 11/09/2022
+description: Learn how to set up your development machine to use localized IntelliSense files for .NET projects (including .NET Core) in Visual Studio.
+ms.date: 11/11/2024
 ---
 # How to install localized IntelliSense files for .NET
 
@@ -15,7 +15,7 @@ ms.date: 11/09/2022
 
 ## Prerequisites
 
-- [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet) or [.NET 5 SDK](https://dotnet.microsoft.com/download/dotnet/5.0).
+- [.NET SDK](https://dotnet.microsoft.com/download/dotnet/).
 - [Visual Studio 2019 version 16.3](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=learn.microsoft.com&utm_campaign=inline+link&utm_content=download+vs2019) or a later version.
 
 ## Download and install the localized IntelliSense files
@@ -36,7 +36,7 @@ ms.date: 11/09/2022
 
       | SDK type              | Path                               |
       |-----------------------|------------------------------------|
-      | .NET 5 and .NET Core  | *Microsoft.NETCore.App.Ref*        |
+      | .NET                  | *Microsoft.NETCore.App.Ref*        |
       | Windows Desktop       | *Microsoft.WindowsDesktop.App.Ref* |
       | .NET Standard         | *NETStandard.Library.Ref*          |
 

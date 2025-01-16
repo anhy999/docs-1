@@ -1,15 +1,15 @@
 ---
 title: Docker deployment
 description: Learn how to deploy Orleans apps with Docker.
-ms.date: 03/09/2022
+ms.date: 07/03/2024
 ---
 
 # Docker deployment
 
 > [!TIP]
-> Even if you are very familiar with Docker and/or Orleans, as any other Orleans documentation, it's recommended you to read it to the end to avoid problems you may face that we already worked around.
+> Even if you're familiar with Docker or Orleans, it's recommended you to read this article to the end to avoid problems you might face that have workarounds.
 
-This article and its sample are a work in progress. Any feedback, PR, or suggestion is very welcome.
+This article and its sample are a work in progress. Any feedback, PR, or suggestion is welcome.
 
 ## Deploy Orleans solutions to Docker
 
@@ -29,14 +29,14 @@ This article assumes that you have the following prerequisites installed:
 
 * [Docker](https://www.docker.com/community-edition#/download) - Docker4X has an easy-to-use installer for the major supported platforms. It contains Docker engine and also Docker Swarm.
 * [Kubernetes (K8s)](https://kubernetes.io/docs/tutorials/stateless-application/hello-minikube/) - Google's offer for Container Orchestration. It contains guidance to install _Minikube_ (a local deployment of K8s) and _kubectl_ along with all its dependencies.
-* [.NET Core](https://dot.net) - Cross-platform flavor of .NET
+* [.NET](https://dotnet.microsoft.com/download) - Cross-platform flavor of .NET
 * [Visual Studio Code (VSCode)](https://code.visualstudio.com/) - You can use whatever IDE you want. VSCode is cross-platform so we are using it to ensure it works on all platforms. Once you installed VSCode, install the [C# extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp).
 
 > [!IMPORTANT]
 > You are not required to have Kubernetes installed if you are not going to use it. Docker4X installer already includes Swarm so no extra installation is required to use it.
 
 > [!NOTE]
-> On Windows, Docker installer will enable Hyper-V at the installation process. As this article and its examples are using .NET Core, the container images used are based on **Windows Server NanoServer**. If you don't plan to use .NET Core and will target .NET 4.6.1 full framework, the image used should be **Windows Server Core** and the 1.4+ version of Orleans (which supports only .net full framework).
+> On Windows, Docker installer will enable Hyper-V at the installation process. As this article and its examples are using .NET Core, the container images used are based on **Windows Server NanoServer**. If you don't plan to use .NET Core and will target .NET 4.6.1 full framework, the image used should be **Windows Server Core** and the 1.4+ version of Orleans (which supports only .NET full framework).
 
 ## Create Orleans solution
 
@@ -534,18 +534,18 @@ orleansdocker_orleans-silo_9     tail -f /dev/null   Up
 
 Docker clustering stack is called **Swarm**, for more information see, [Docker Swarm](https://docs.docker.com/engine/swarm).
 
-To run this article in a `Swarm` cluster, you don't have any extra work. When you run `docker-compose up -d` in a `Swarm` node, it will schedule containers based on the configured rules. The same applies to other Swarm-based services like [Docker Datacenter](https://hub.docker.com/bundles/docker-datacenter), [Azure ACS](/azure/aks) (in Swarm mode), and [AWS ECS Container Service](https://aws.amazon.com/ecs/). All you need to do is to deploy your `Swarm` cluster before deploying your **dockerized** Orleans application.
+To run this article in a `Swarm` cluster, you don't have any extra work. When you run `docker-compose up -d` in a `Swarm` node, it will schedule containers based on the configured rules. The same applies to other Swarm-based services like [Azure ACS](/azure/aks) (in Swarm mode) and [AWS ECS Container Service](https://aws.amazon.com/ecs/). All you need to do is to deploy your `Swarm` cluster before deploying your **dockerized** Orleans application.
 
 > [!NOTE]
-> If you are using a Docker engine with the Swarm mode that already has support for `stack`, `deploy`, and `compose` v3, a better approach to deploy your solution would be `docker stack deploy -c docker-compose.yml <name>`. Just keep in mind that it requires v3 compose file to support your Docker engine and the majority of hosted services like Azure and AWS still use v2 and older engines.
+> If you're using a Docker engine with the Swarm mode that already has support for `stack`, `deploy`, and `compose` v3, a better approach to deploy your solution is `docker stack deploy -c docker-compose.yml <name>`. Just keep in mind that it requires v3 compose file to support your Docker engine, and the majority of hosted services like Azure and AWS still use v2 and older engines.
 
 ## Google Kubernetes (K8s)
 
-If you plan to use [Kubernetes](https://kubernetes.io/) to host Orleans, there is a community-maintained clustering provider available at [OrleansContrib\Orleans.Clustering.Kubernetes](https://github.com/OrleansContrib/Orleans.Clustering.Kubernetes) and there you can find documentation and samples on how to host Orleans in Kubernetes seamlessly using the provider.
+If you plan to use [Kubernetes](https://kubernetes.io/) to host Orleans, there is a community-maintained clustering provider available at [OrleansContrib\Orleans.Clustering.Kubernetes](https://github.com/OrleansContrib/Orleans.Clustering.Kubernetes). There you can find documentation and samples on how to host Orleans in Kubernetes seamlessly using the provider.
 
 ## Debug Orleans inside containers
 
-Well, now that you know how to run Orleans in a container from scratch, would be good to leverage one of the most important principles in Docker. Containers are immutable. And they should have (almost) the same image, dependencies, and runtime in development as in production. This ensures the good old statement _"It works on my machine!"_ never happens again. To make that possible, you need to have a way to develop _inside_ the container and that includes having a debugger attached to your application inside the container.
+Now that you know how to run Orleans in a container from scratch, it's good to leverage one of the most important principles in Docker. Containers are immutable. And they should have (almost) the same image, dependencies, and runtime in development as in production. This ensures the good old statement _"It works on my machine!"_ never happens again. To make that possible, you need to have a way to develop _inside_ the container and that includes having a debugger attached to your application inside the container.
 
 There are multiple ways to achieve that using multiple tools. After evaluating several, by the time I wrote this article, I ended up choosing one that looks more simple and is less intrusive in the application.
 

@@ -1,71 +1,117 @@
 ---
-title: Overview of the .NET Upgrade Assistant
-description: Introducing the .NET Upgrade Assistant tool that helps migrate from .NET Framework and upgrades your projects to .NET 6.
+title: .NET Upgrade Assistant Overview
+description: "Learn more about .NET Upgrade Assistant for .NET-related projects. This tool helps you upgrade from older versions of .NET, including .NET Framework, to the latest version of .NET. Code incompatibilities can be fixed as part of the upgrade."
 author: adegeo
-ms.date: 08/02/2022
+ms.author: adegeo
+ms.topic: overview
+ms.date: 10/08/2024
+
+#customer intent: As a developer, I want to upgrade my project so that I can take advantage of the latest features.
+
 ---
-# Overview of the .NET Upgrade Assistant
 
-You might have apps that currently run on the .NET Framework that you're interested in porting to .NET 6. The .NET Upgrade Assistant tool can assist with this process. This article provides:
+# What is .NET Upgrade Assistant?
 
-- An overview of the .NET Upgrade Assistant.
-- How to install the .NET Upgrade Assistant.
+.NET Upgrade Assistant helps upgrade projects to newer versions of .NET, and analyzes your code to spot and fix potential incompatibilities. One focus of the tool is to help migrate a project from .NET Framework, .NET Core, or .NET, to the latest version of .NET. You use the extension or tool to upgrade entire .NET projects, or some aspect of the project, such migrating a configuration file from an older type to a newer type.
 
-## What is the .NET Upgrade Assistant
+.NET Upgrade Assistant is distributed as a Visual Studio extension or a command-line interface (CLI) tool.
 
-The .NET Upgrade Assistant is a command-line tool that can be run on different kinds of .NET Framework apps. It's designed to assist with upgrading .NET Framework apps to .NET 6. After running the tool, **in most cases the app will require additional effort to complete the migration**. The tool includes the installation of analyzers that can assist with completing the migration.
+## Analyze and upgrade
 
-Currently the tool supports the following .NET Framework app types:
+.NET Upgrade Assistant includes an analysis engine that scans your projects and their dependencies. After the scan is complete, a report is generated with detailed information about performing an upgrade. You can use this information to upgrade either the entire project or specific parts of the project.
 
-- .NET Framework Windows Forms apps
-- .NET Framework WPF apps
-- .NET Framework server-side WCF apps
-- .NET Native UWP apps
-- .NET Framework ASP.NET MVC apps
-- .NET Framework console apps
-- .NET Framework class libraries
+<!-- I don't have this information ready yet
 
-The tool also supports projects that use these code languages:
+## Extensibility
 
-- C#
-- Visual Basic.NET
+One key feature of .NET Upgrade Assistant is designing upgrade extensions for your own libraries. Upgrade extensions can be made up of one or two upgrades:
 
-The .NET Upgrade Assistant is currently prerelease and is receiving frequent updates. If you discover problems using the tool, report them in the tool's [GitHub repository](https://github.com/dotnet/upgrade-assistant).
+- Package Map
 
-## Install the .NET Upgrade Assistant
+  This is something.
 
-This section describes how to install the .NET Upgrade Assistant. You can also follow [a step-by-step guided tutorial](https://dotnet.microsoft.com/platform/upgrade-assistant/tutorial/intro).
+- API Map
 
-### Prerequisites
+  This is something.
 
-- Windows Operating System
-- [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
-- [Visual Studio 2022 version 17.0 or later](https://visualstudio.microsoft.com/downloads/)
+-->
 
-### Installation steps
+## Supported project types
 
-The .NET Upgrade Assistant is a .NET tool that is installed globally with the following command:
+.NET Upgrade Assistant supports upgrading projects coded in either C# or Visual Basic. The following types of projects are supported:
 
-```dotnetcli
-dotnet tool install -g upgrade-assistant
-```
+- ASP.NET
+- Azure Functions
+- Windows Presentation Foundation
+- Windows Forms
+- Class libraries
+- Console apps
+- Xamarin Forms
+- .NET MAUI
+- .NET Native UWP
 
-Similarly, because the .NET Upgrade Assistant is installed as a .NET tool, it can be easily updated by running:
+Some products provide guidance on how to use .NET Upgrade Assistant.
 
-```dotnetcli
-dotnet tool update -g upgrade-assistant
-```
+- [ASP.NET](/aspnet/core/migration/mvc)
+- [Windows Presentation Foundation](/dotnet/desktop/wpf/migration/)
+- [Windows Forms](/dotnet/desktop/winforms/migration/)
+- [Universal Windows Platform](/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/upgrade-assistant)
+- [Windows Communication Foundation](../../core/porting/upgrade-assistant-wcf.md)
 
-> [!IMPORTANT]
-> Installing this tool may fail if you've configured additional NuGet feed sources. Use the `--ignore-failed-sources` parameter to treat those failures as warnings instead of errors:
->
-> ```dotnetcli
-> dotnet tool install -g --ignore-failed-sources upgrade-assistant
-> ```
+## Upgrade paths
 
-## See also
+The following upgrade paths are supported:
 
-- [Upgrade an ASP.NET MVC App to .NET 6](upgrade-assistant-aspnetmvc.md)
-- [Upgrade a WPF App to .NET 6](upgrade-assistant-wpf-framework.md)
-- [Upgrade a Windows Forms App to .NET 6](upgrade-assistant-winforms-framework.md)
-- [.NET Upgrade Assistant GitHub Repository](https://github.com/dotnet/upgrade-assistant)
+- .NET Framework to .NET
+- .NET Core to .NET
+- Azure Functions v1-v3 to v4 isolated (targeting net6.0+)
+- UWP to WinUI 3
+- Previous .NET version to the latest .NET version
+- Xamarin Forms to .NET MAUI
+  - XAML file transformations only support upgrading namespaces. For more comprehensive transformations, use Visual Studio 2022 version 17.6 or later.
+
+## Upgrade details and options
+
+When an upgrade is started, a wizard walks you through configuring some of the options before the upgrade is initiated. Based on the type of project you're upgrading, the wizard presents different options. For an example of upgrading a project, see [Upgrade projects with .NET Upgrade Assistant](upgrade-assistant-how-to-upgrade.md).
+
+### How the upgrade should be performed
+
+Based on the type of project you're upgrading, you might be able to change how the upgrade is performed. The type of project affects which options are available, and one or more of the following items might be missing:
+
+- In-place project upgrade
+
+  This option upgrades your project without making a copy.
+
+- Side-by-side project upgrade
+
+  Copies your project and upgrades the copy, leaving your original project alone.
+
+- Side-by-side incremental
+
+  This is a good choice for complicated web apps. Upgrading from ASP.NET to ASP.NET Core requires quite a bit of work and at times manual refactoring. This mode puts a .NET project next to the existing .NET Framework project. Endpoints are routed through the .NET project, while all other calls are sent to .NET Framework application.
+
+  This mode lets you slowly upgrade your ASP.NET or library app piece-by-piece.
+
+### Upgrade results
+
+Once the upgrade is finished, a status screen is displayed which shows all of the artifacts associated with the upgrade. Each upgrade artifact can be expanded to read more information about the status. The following list describes the status icons:
+
+- **Unfilled green checkmark**: The tool didn't find anything about the artifact to upgrade.
+- **Filled green checkmark**: The artifact was upgraded and completed successfully.
+- **Yellow warning sign**: The artifact was upgraded, but there's important information you should consider.
+- **Red _X_**: The artifact upgrade was unsuccessful.
+
+:::image type="content" source="media/upgrade-assistant-overview/visual-studio-upgrade-results.png" alt-text="The .NET Upgrade Assistant's Upgrade results tab in Visual Studio.":::
+
+Additionally, the actions the performed during the upgrade are logged to the **Output** window under the **Upgrade Assistant** source, as shown in the following image:
+
+:::image type="content" source="media/upgrade-assistant-overview/visual-studio-output-window.png" alt-text="The output window in Visual Studio showing the results from the .NET Upgrade Assistant.":::
+
+After upgrading your project, test it thoroughly!
+
+## Related content
+
+- [What is code analysis with .NET Upgrade Assistant?](upgrade-assistant-analyze-overview.md)
+- [Install .NET Upgrade Assistant](upgrade-assistant-install.md)
+- [Analyze projects with .NET Upgrade Assistant](upgrade-assistant-how-to-analyze.md)
+- [Upgrade projects with .NET Upgrade Assistant](upgrade-assistant-how-to-upgrade.md)

@@ -81,7 +81,7 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 
 - **`-ep|--export-path <PATH>`**
 
-  Exports the certificate to a file so that it can be used by other tools. Specify the full path to the exported certificate file, including the file name. The type of certificate files that are created depends on which options are used with `--export-path`:
+  Exports the certificate to a file so that it can be used by other tools. Specify the full path to the exported certificate file, including the file name. The containing directories must already exist and access to them should be restricted. The type of certificate files that are created depends on which options are used with `--export-path`:
 
   | Options | What is exported |
   |---------|---------|
@@ -99,7 +99,7 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 
   For information about the effect of this option when used with `--password`, `--no-password`, or without either of those options, see [--export-path](#exportpath) earlier in this article.
 
-  - **`-i|--import <PATH>`**
+- **`-i|--import <PATH>`**
 
   Imports the provided HTTPS development certificate into the local machine. Requires that you also specify the `--clean` option, which clears out any existing HTTPS developer certificates.
 

@@ -7,7 +7,7 @@ namespace BinaryFormatterEventSample
 {
     class Program
     {
-        static EventListener _globalListener = null;
+        static EventListener? _globalListener = null;
 
         static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace BinaryFormatterEventSample
                 if (args.EventSource?.Name ==
                     "System.Runtime.Serialization.Formatters.Binary.BinaryFormatterEventSource")
                 {
-                    ((EventListener)sender)
+                    ((EventListener?)sender)?
                         .EnableEvents(args.EventSource, EventLevel.LogAlways);
                 }
             };
@@ -50,18 +50,18 @@ namespace BinaryFormatterEventSample
             Console.WriteLine
                 ($"Rehydrated person {rehydratedPerson.FirstName} {rehydratedPerson.LastName}");
             Console.Write
-                ($"Favorite book: {rehydratedPerson.FavoriteBook.Title} ");
+                ($"Favorite book: {rehydratedPerson.FavoriteBook?.Title} ");
             Console.Write
-                ($"by {rehydratedPerson.FavoriteBook.Author}, ");
+                ($"by {rehydratedPerson.FavoriteBook?.Author}, ");
             Console.WriteLine
-                ($"list price {rehydratedPerson.FavoriteBook.Price}");
+                ($"list price {rehydratedPerson.FavoriteBook?.Price}");
         }
 
         private static byte[] SerializePerson(Person p)
         {
             MemoryStream memStream = new MemoryStream();
+#pragma warning disable SYSLIB0011 // BinaryFormatter is obsolete
             BinaryFormatter formatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011 // BinaryFormatter.Serialize is obsolete
             formatter.Serialize(memStream, p);
 #pragma warning restore SYSLIB0011
 
@@ -71,9 +71,9 @@ namespace BinaryFormatterEventSample
         private static Person DeserializePerson(byte[] serializedData)
         {
             MemoryStream memStream = new MemoryStream(serializedData);
+#pragma warning disable SYSLIB0011 // BinaryFormatter is obsolete
             BinaryFormatter formatter = new BinaryFormatter();
 
-#pragma warning disable SYSLIB0011 // Danger: BinaryFormatter.Deserialize is insecure for untrusted input
             return (Person)formatter.Deserialize(memStream);
 #pragma warning restore SYSLIB0011
         }
@@ -82,17 +82,17 @@ namespace BinaryFormatterEventSample
     [Serializable]
     public class Person
     {
-        public string FirstName;
-        public string LastName;
-        public Book FavoriteBook;
+        public string? FirstName;
+        public string? LastName;
+        public Book? FavoriteBook;
     }
 
     [Serializable]
     public class Book
     {
-        public string Title;
-        public string Author;
-        public decimal Price;
+        public string? Title;
+        public string? Author;
+        public decimal? Price;
     }
 
     // A sample EventListener that writes data to System.Console.
@@ -107,7 +107,7 @@ namespace BinaryFormatterEventSample
             {
                 for (int i = 0; i < eventData.PayloadNames.Count; i++)
                 {
-                    Console.WriteLine($"{eventData.PayloadNames[i]} = {eventData.Payload[i]}");
+                    Console.WriteLine($"{eventData.PayloadNames[i]} = {eventData.Payload?[i]}");
                 }
             }
         }

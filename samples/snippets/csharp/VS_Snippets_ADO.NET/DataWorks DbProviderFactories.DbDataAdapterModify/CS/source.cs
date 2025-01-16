@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.Data.OleDb;
-using System.Configuration;
 using System.Data.Common;
 
-class Program
+static class Program
 {
-    static void Main()
-    {
-        //CreateDataAdapter("System.Data.OleDb", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=c:\\Data\\Northwind.mdb;");
-        CreateDataAdapter("System.Data.SqlClient", "Data Source=(local);Initial Catalog=Northwind;Integrated Security=true;");
-
-        Console.ReadLine();
-    }
-
     // <Snippet1>
     static void CreateDataAdapter(string providerName, string connectionString)
     {
@@ -30,7 +19,7 @@ class Program
             using (connection)
             {
                 // Define the query.
-                string queryString =
+                const string queryString =
                     "SELECT CustomerID, CompanyName FROM Customers";
 
                 // Create the select command.
@@ -60,7 +49,7 @@ class Program
                     adapter.DeleteCommand.CommandText);
 
                 // Fill the DataTable.
-                DataTable table = new DataTable();
+                DataTable table = new();
                 adapter.Fill(table);
 
                 // Insert a new row.

@@ -2,7 +2,7 @@
 title: dotnet new <TEMPLATE>
 description: The dotnet new command creates new .NET projects based on the specified template.
 no-loc: [Blazor, WebAssembly]
-ms.date: 09/04/2020
+ms.date: 02/15/2024
 ---
 # dotnet new &lt;TEMPLATE&gt;
 
@@ -16,7 +16,7 @@ ms.date: 09/04/2020
 
 ```dotnetcli
 dotnet new <TEMPLATE> [--dry-run] [--force] [-lang|--language {"C#"|"F#"|VB}]
-    [-n|--name <OUTPUT_NAME>] [--no-update-check] 
+    [-n|--name <OUTPUT_NAME>] [-f|--framework <FRAMEWORK>] [--no-update-check]
     [-o|--output <OUTPUT_DIRECTORY>] [--project <PROJECT_PATH>]
     [-d|--diagnostics] [--verbosity <LEVEL>] [Template options]
 
@@ -56,46 +56,7 @@ To activate tab completion for the .NET SDK, see [Enable tab completion](enable-
 
   Starting with .NET SDK 5.0.300, the [`search` command](dotnet-new-search.md) should be used to search for templates in NuGet.org.
 
-  The following table shows the templates that come pre-installed with the .NET SDK. The default language for the template is shown inside the brackets. Click on the short name link to see the specific template options.
-
-| Templates                                    | Short name                                                   | Language     | Tags                                  | Introduced |
-|----------------------------------------------|--------------------------------------------------------------|--------------|---------------------------------------|------------|
-| Console Application                          | [`console`](dotnet-new-sdk-templates.md#console)             | [C#], F#, VB | Common/Console                        | 1.0        |
-| Class library                                | [`classlib`](dotnet-new-sdk-templates.md#classlib)           | [C#], F#, VB | Common/Library                        | 1.0        |
-| WPF Application                              | [`wpf`](dotnet-new-sdk-templates.md#wpf)                     | [C#], VB     | Common/WPF                            | 3.0 (5.0 for VB)|
-| WPF Class library                            | [`wpflib`](dotnet-new-sdk-templates.md#wpf)                  | [C#], VB     | Common/WPF                            | 3.0 (5.0 for VB)|
-| WPF Custom Control Library                   | [`wpfcustomcontrollib`](dotnet-new-sdk-templates.md#wpf)     | [C#], VB     | Common/WPF                            | 3.0 (5.0 for VB)|
-| WPF User Control Library                     | [`wpfusercontrollib`](dotnet-new-sdk-templates.md#wpf)       | [C#], VB     | Common/WPF                            | 3.0 (5.0 for VB)|
-| Windows Forms (WinForms) Application         | [`winforms`](dotnet-new-sdk-templates.md#winforms)           | [C#], VB     | Common/WinForms                       | 3.0 (5.0 for VB)|
-| Windows Forms (WinForms) Class library       | [`winformslib`](dotnet-new-sdk-templates.md#winforms)        | [C#], VB     | Common/WinForms                       | 3.0 (5.0 for VB)|
-| Worker Service                               | [`worker`](dotnet-new-sdk-templates.md#web-others)           | [C#]         | Common/Worker/Web                     | 3.0        |
-| Unit Test Project                            | [`mstest`](dotnet-new-sdk-templates.md#test)                 | [C#], F#, VB | Test/MSTest                           | 1.0        |
-| NUnit 3 Test Project                         | [`nunit`](dotnet-new-sdk-templates.md#nunit)                 | [C#], F#, VB | Test/NUnit                            | 2.1.400    |
-| NUnit 3 Test Item                            | `nunit-test`                                                 | [C#], F#, VB | Test/NUnit                            | 2.2        |
-| xUnit Test Project                           | [`xunit`](dotnet-new-sdk-templates.md#test)                  | [C#], F#, VB | Test/xUnit                            | 1.0        |
-| Razor Component                              | `razorcomponent`                                             | [C#]         | Web/ASP.NET                           | 3.0        |
-| Razor Page                                   | [`page`](dotnet-new-sdk-templates.md#page)                   | [C#]         | Web/ASP.NET                           | 2.0        |
-| MVC ViewImports                              | [`viewimports`](dotnet-new-sdk-templates.md#namespace)       | [C#]         | Web/ASP.NET                           | 2.0        |
-| MVC ViewStart                                | `viewstart`                                                  | [C#]         | Web/ASP.NET                           | 2.0        |
-| Blazor Server App                            | [`blazorserver`](dotnet-new-sdk-templates.md#blazorserver)   | [C#]         | Web/Blazor                            | 3.0        |
-| Blazor WebAssembly App                       | [`blazorwasm`](dotnet-new-sdk-templates.md#blazorwasm)       | [C#]         | Web/Blazor/WebAssembly                | 3.1.300    |
-| ASP.NET Core Empty                           | [`web`](dotnet-new-sdk-templates.md#web)                     | [C#], F#     | Web/Empty                             | 1.0        |
-| ASP.NET Core Web App (Model-View-Controller) | [`mvc`](dotnet-new-sdk-templates.md#web-options)             | [C#], F#     | Web/MVC                               | 1.0        |
-| ASP.NET Core Web App                         | [`webapp, razor`](dotnet-new-sdk-templates.md#web-options)   | [C#]         | Web/MVC/Razor Pages                   | 2.2, 2.0   |
-| ASP.NET Core with Angular                    | [`angular`](dotnet-new-sdk-templates.md#spa)                 | [C#]         | Web/MVC/SPA                           | 2.0        |
-| ASP.NET Core with React.js                   | [`react`](dotnet-new-sdk-templates.md#spa)                   | [C#]         | Web/MVC/SPA                           | 2.0        |
-| ASP.NET Core with React.js and Redux         | [`reactredux`](dotnet-new-sdk-templates.md#reactredux)       | [C#]         | Web/MVC/SPA                           | 2.0        |
-| Razor Class Library                          | [`razorclasslib`](dotnet-new-sdk-templates.md#razorclasslib) | [C#]         | Web/Razor/Library/Razor Class Library | 2.1        |
-| ASP.NET Core Web API                         | [`webapi`](dotnet-new-sdk-templates.md#webapi)               | [C#], F#     | Web/WebAPI                            | 1.0        |
-| ASP.NET Core gRPC Service                    | [`grpc`](dotnet-new-sdk-templates.md#web-others)             | [C#]         | Web/gRPC                              | 3.0        |
-| dotnet gitignore file                        | `gitignore`                                                  |              | Config                                | 3.0        |
-| global.json file                             | [`globaljson`](dotnet-new-sdk-templates.md#globaljson)       |              | Config                                | 2.0        |
-| NuGet Config                                 | `nugetconfig`                                                |              | Config                                | 1.0        |
-| Dotnet local tool manifest file              | `tool-manifest`                                              |              | Config                                | 3.0        |
-| Web Config                                   | `webconfig`                                                  |              | Config                                | 1.0        |
-| Solution File                                | `sln`                                                        |              | Solution                              | 1.0        |
-| Protocol Buffer File                         | [`proto`](dotnet-new-sdk-templates.md#namespace)             |              | Web/gRPC                              | 3.0        |
-| EditorConfig file                            | [`editorconfig`](dotnet-new-sdk-templates.md#editorconfig)   |              | Config                                | 6.0        |
+[!INCLUDE [templates](../../../includes/templates.md)]
 
 ## Options
 
@@ -121,6 +82,10 @@ To activate tab completion for the .NET SDK, see [Enable tab completion](enable-
 - **`-n|--name <OUTPUT_NAME>`**
 
   The name for the created output. If no name is specified, the name of the current directory is used.
+
+- **`-f|--framework <FRAMEWORK>`**
+
+  Specifies the [target framework](../../standard/frameworks.md). It expects a target framework moniker (TFM). Examples: "net6.0", "net7.0-macos". This value will be reflected in the project file.
 
 - **`-no-update-check`**
 
@@ -180,10 +145,10 @@ Each template may have additional options defined. For more information, see [.N
   dotnet new xunit
   ```
 
-- Create a *global.json* in the current directory setting the SDK version to 3.1.101:
+- Create a *global.json* in the current directory setting the SDK version to 8.0.101:
 
   ```dotnetcli
-  dotnet new globaljson --sdk-version 3.1.101
+  dotnet new globaljson --sdk-version 8.0.101 --roll-forward latestFeature
   ```
 
 - Show help for the C# console application template:

@@ -1,14 +1,12 @@
 ﻿// <SnippetImportsUsing>
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.Common;
 using System.Globalization;
-// </SnippetImportsUsing>
+using System.Linq;
 using System.Windows.Forms;
+// </SnippetImportsUsing>
 
 namespace LINQtoDataSetSamples
 {
@@ -584,7 +582,7 @@ namespace LINQtoDataSetSamples
         }
         #endregion
 
-        #region "Partioning Operators"
+        #region "Partitioning Operators"
 
         /*[Category("Partitioning Operators")]
         [Title("Take - Nested")]
@@ -1376,14 +1374,18 @@ namespace LINQtoDataSetSamples
         {
             //<SnippetToDictionary>
             // Fill the DataSet.
-            DataSet ds = new DataSet();
-            ds.Locale = CultureInfo.InvariantCulture;
+            DataSet ds = new DataSet
+            {
+                Locale = CultureInfo.InvariantCulture
+            };
             FillDataSet(ds);
 
             DataTable products = ds.Tables["Product"];
 
-            var scoreRecordsDict = products.AsEnumerable().
-                ToDictionary(record => record.Field<string>("Name"));
+            var scoreRecordsDict =
+                products.AsEnumerable()
+                    .Where(rec=>rec.Field<string>("Name") !=null)
+                    .ToDictionary(record => record.Field<string>("Name"));
             Console.WriteLine("Top Tube's ProductID: {0}",
                 scoreRecordsDict["Top Tube"]["ProductID"]);
             //</SnippetToDictionary>
@@ -1829,7 +1831,7 @@ namespace LINQtoDataSetSamples
                 Console.WriteLine("ContactID: {0}", orderGroup.Category);
                 foreach (var order in orderGroup.smallestTotalDue)
                 {
-                    Console.WriteLine("Mininum TotalDue {0} for SalesOrderID {1}: ",
+                    Console.WriteLine("Minimum TotalDue {0} for SalesOrderID {1}: ",
                         order.Field<decimal>("TotalDue"),
                         order.Field<Int32>("SalesOrderID"));
                 }
@@ -2618,14 +2620,11 @@ namespace LINQtoDataSetSamples
 
         static void FillDataSet(DataSet ds)
         {
-            // <SnippetFillDataSet>
             try
             {
                 // Create a new adapter and give it a query to fetch sales order, contact,
-                // address, and product information for sales in the year 2002. Point connection
-                // information to the configuration setting "AdventureWorks".
-                string connectionString = "Data Source=localhost;Initial Catalog=AdventureWorks;"
-                    + "Integrated Security=true;";
+                // address, and product information for sales in the year 2002.
+                string connectionString = "some secure connection string";
 
                 SqlDataAdapter da = new SqlDataAdapter(
                     "SELECT SalesOrderID, ContactID, OrderDate, OnlineOrderFlag, " +
@@ -2689,7 +2688,6 @@ namespace LINQtoDataSetSamples
             {
                 Console.WriteLine("SQL exception occurred: " + ex.Message);
             }
-            // </SnippetFillDataSet>
         }
 
         static void WriteSchemaToXSD(DataSet ds)

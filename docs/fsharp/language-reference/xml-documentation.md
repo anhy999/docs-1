@@ -14,8 +14,7 @@ The compiler-generated XML file can be distributed alongside your .NET assembly 
 show quick information about types or members. Additionally, the XML file can be run through tools
 like [fsdocs](http://fsprojects.github.io/FSharp.Formatting/) to generate API reference websites.
 
-XML documentation comments, like all other comments, are ignored by the compiler, unless the options described below are enabled to check the validity and
-completeness of comments at compile time.
+By default, XML documentation comments are ignored by the compiler. To change this, set `--warnon:3390`. The compiler will then verify the syntax of the XML and the parameters referred to in `<param>` and `<paramref>` tags.
 
 You can generate the XML file at compile time by doing one of the following:
 
@@ -47,7 +46,7 @@ The following example shows the alternative method, without XML tags. In this ex
 ## Comments with XML tags
 
 If a comment body begins with `<` (normally `<summary>`), then it is treated as an XML formatted comment
-body using XML tags. This second enables you to specify separate notes
+body using XML tags. This second way enables you to specify separate notes
 for a short summary, additional remarks, documentation for each parameter and type parameter and exceptions thrown, and a description of the return value.
 
 The following is a typical XML documentation comment in a signature file:

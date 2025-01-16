@@ -2,7 +2,7 @@
 title: Collect a distributed trace - .NET
 description: Tutorials to collect distributed traces in .NET applications using OpenTelemetry, Application Insights, or ActivityListener
 ms.topic: tutorial
-ms.date: 03/14/2021
+ms.date: 08/27/2024
 ---
 
 # Collect a distributed trace
@@ -17,13 +17,123 @@ available to diagnose application issues when needed. See
 
 ## Collect traces using OpenTelemetry
 
-### Prerequisites
+[OpenTelemetry](https://opentelemetry.io/) is a vendor-neutral open-source project supported by the
+[Cloud Native Computing Foundation](https://www.cncf.io/) that aims to standardize generating and collecting telemetry for
+cloud-native software. In these examples, you'll collect and display distributed trace information on the console. To learn how to
+configure OpenTelemetry to send information elsewhere, see the
+[OpenTelemetry getting started guide](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/docs/trace/getting-started-console/README.md).
 
-- [.NET Core 2.1 SDK](https://dotnet.microsoft.com/download/dotnet) or a later version
+### ASP.NET example
 
-### Create an example application
+#### Prerequisites
 
-Before any distributed trace telemetry can be collected, we need to produce it. Often this instrumentation might be
+- [.NET Core 8.0 SDK](https://dotnet.microsoft.com/download/dotnet) or a later version
+
+#### Create an example application
+
+First, create a new ASP.NET web app to use as the demo application.
+
+```dotnetcli
+dotnet new webapp
+```
+
+This app displays a web page, but no distributed tracing information is collected yet
+if we browse the web page.
+
+#### Configure collection
+
+To use OpenTelemetry, you need to add references to several NuGet packages.
+
+```dotnetcli
+dotnet add package OpenTelemetry
+dotnet add package OpenTelemetry.Exporter.Console
+dotnet add package OpenTelemetry.Extensions.Hosting
+dotnet add package OpenTelemetry.Instrumentation.AspNetCore
+```
+
+Next, modify the source code in *Program.cs* so it looks like this:
+
+```csharp
+using OpenTelemetry;
+using OpenTelemetry.Trace;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddOpenTelemetry()
+    .WithTracing(builder =>
+    {
+        builder.AddAspNetCoreInstrumentation();
+        builder.AddConsoleExporter();
+    });
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapRazorPages();
+
+app.Run();
+```
+
+Run the app and use a web browser to browse to the web page being hosted. Now that you enabled OpenTelemetry distributed
+tracing, you should see information about the browser web requests printed to the console:
+
+```
+Activity.TraceId:            4510acfc49c6f8a582c6a40004df9a76
+Activity.SpanId:             65fe2c5c15f05ed8
+Activity.TraceFlags:         Recorded
+Activity.ActivitySourceName: Microsoft.AspNetCore
+Activity.DisplayName:        GET
+Activity.Kind:               Server
+Activity.StartTime:          2024-08-27T23:12:58.7837908Z
+Activity.Duration:           00:00:00.1297070
+Activity.Tags:
+    server.address: localhost
+    server.port: 5005
+    http.request.method: GET
+    url.scheme: http
+    url.path: /
+    network.protocol.version: 1.1
+    user_agent.original: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0
+    http.response.status_code: 200
+Resource associated with Activity:
+    telemetry.sdk.name: opentelemetry
+    telemetry.sdk.language: dotnet
+    telemetry.sdk.version: 1.9.0
+    service.name: unknown_service:webapp
+```
+
+All of the OpenTelemetry configuration occurs in the new source lines that start with `builder.Services.AddOpenTelemetry()`. You used
+`.WithTracing(...)` to enable distributed tracing. `AddAspNetCoreInstrumentation()` enabled OpenTelemetry to collect all the
+distributed trace Activities that are produced by the ASP.NET Core web server, and `AddConsoleExporter()` instructs OpenTelemetry
+to send that information to the console. For a less trivial app, you could add more instrumentation libraries to also collect
+tracing for database queries or outbound HTTP requests. You'd also replace the console exporter with an exporter for Jaeger, Zipken, or
+another monitoring service you've chosen to use.
+
+### Console app example
+
+#### Prerequisites
+
+- [.NET Core 8.0 SDK](https://dotnet.microsoft.com/download/dotnet) or a later version
+
+#### Create an example application
+
+Before any distributed trace telemetry can be collected, you need to produce it. Often this instrumentation is
 in libraries, but for simplicity, you'll create a small app that has some example instrumentation using
 <xref:System.Diagnostics.ActivitySource.StartActivity%2A>. At this point, no collection has happened, and
 StartActivity() has no side-effect and returns null. See
@@ -36,10 +146,6 @@ dotnet new console
 Applications that target .NET 5 and later already have the necessary distributed tracing APIs included. For apps targeting older
 .NET versions, add the [System.Diagnostics.DiagnosticSource NuGet package](https://www.nuget.org/packages/System.Diagnostics.DiagnosticSource/)
 version 5 or greater.
-
-```dotnetcli
-dotnet add package System.Diagnostics.DiagnosticSource
-```
 
 Replace the contents of the generated Program.cs with this example source:
 
@@ -62,7 +168,7 @@ namespace Sample.DistributedTracing
 
         static async Task DoSomeWork()
         {
-            using (Activity a = s_source.StartActivity("SomeWork"))
+            using (Activity? a = s_source.StartActivity("SomeWork"))
             {
                 await StepOne();
                 await StepTwo();
@@ -71,7 +177,7 @@ namespace Sample.DistributedTracing
 
         static async Task StepOne()
         {
-            using (Activity a = s_source.StartActivity("StepOne"))
+            using (Activity? a = s_source.StartActivity("StepOne"))
             {
                 await Task.Delay(500);
             }
@@ -79,7 +185,7 @@ namespace Sample.DistributedTracing
 
         static async Task StepTwo()
         {
-            using (Activity a = s_source.StartActivity("StepTwo"))
+            using (Activity? a = s_source.StartActivity("StepTwo"))
             {
                 await Task.Delay(1000);
             }
@@ -95,13 +201,7 @@ Running the app does not collect any trace data yet:
 Example work done
 ```
 
-### Collect using OpenTelemetry
-
-[OpenTelemetry](https://opentelemetry.io/) is a vendor-neutral open-source project supported by the
-[Cloud Native Computing Foundation](https://www.cncf.io/) that aims to standardize generating and collecting telemetry for
-cloud-native software. In this example, you will collect and display distributed trace information on the console though
-OpenTelemetry can be reconfigured to send it elsewhere. For more information, see the
-[OpenTelemetry getting started guide](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/docs/trace/getting-started/README.md).
+#### Configure collection
 
 Add the [OpenTelemetry.Exporter.Console](https://www.nuget.org/packages/OpenTelemetry.Exporter.Console/) NuGet package.
 
@@ -140,39 +240,57 @@ Now the app collects distributed trace information and displays it to the consol
 
 ```dotnetcli
 > dotnet run
-Activity.Id:          00-7759221f2c5599489d455b84fa0f90f4-6081a9b8041cd840-01
-Activity.ParentId:    00-7759221f2c5599489d455b84fa0f90f4-9a52f72c08a9d447-01
-Activity.DisplayName: StepOne
-Activity.Kind:        Internal
-Activity.StartTime:   2021-03-18T10:46:46.8649754Z
-Activity.Duration:    00:00:00.5069226
+Activity.TraceId:            48d7509cc4f06db6f48f2207f19c3918
+Activity.SpanId:             406a1de6b5e8192e
+Activity.TraceFlags:         Recorded
+Activity.ParentSpanId:       345f5f98015b589a
+Activity.ActivitySourceName: Sample.DistributedTracing
+Activity.DisplayName:        StepOne
+Activity.Kind:               Internal
+Activity.StartTime:          2024-08-27T23:22:44.9900801Z
+Activity.Duration:           00:00:00.5077426
 Resource associated with Activity:
     service.name: MySample
-    service.instance.id: 909a4624-3b2e-40e4-a86b-4a2c8003219e
+    service.instance.id: a87f9e7d-d28c-4a91-9bb3-939a50cac7db
+    telemetry.sdk.name: opentelemetry
+    telemetry.sdk.language: dotnet
+    telemetry.sdk.version: 1.9.0
 
-Activity.Id:          00-7759221f2c5599489d455b84fa0f90f4-d2b283db91cf774c-01
-Activity.ParentId:    00-7759221f2c5599489d455b84fa0f90f4-9a52f72c08a9d447-01
-Activity.DisplayName: StepTwo
-Activity.Kind:        Internal
-Activity.StartTime:   2021-03-18T10:46:47.3838737Z
-Activity.Duration:    00:00:01.0142278
+Activity.TraceId:            48d7509cc4f06db6f48f2207f19c3918
+Activity.SpanId:             458fb58342ca127a
+Activity.TraceFlags:         Recorded
+Activity.ParentSpanId:       345f5f98015b589a
+Activity.ActivitySourceName: Sample.DistributedTracing
+Activity.DisplayName:        StepTwo
+Activity.Kind:               Internal
+Activity.StartTime:          2024-08-27T23:22:45.5906581Z
+Activity.Duration:           00:00:01.0023729
 Resource associated with Activity:
     service.name: MySample
-    service.instance.id: 909a4624-3b2e-40e4-a86b-4a2c8003219e
+    service.instance.id: a87f9e7d-d28c-4a91-9bb3-939a50cac7db
+    telemetry.sdk.name: opentelemetry
+    telemetry.sdk.language: dotnet
+    telemetry.sdk.version: 1.9.0
 
-Activity.Id:          00-7759221f2c5599489d455b84fa0f90f4-9a52f72c08a9d447-01
-Activity.DisplayName: SomeWork
-Activity.Kind:        Internal
-Activity.StartTime:   2021-03-18T10:46:46.8634510Z
-Activity.Duration:    00:00:01.5402045
+Activity.TraceId:            48d7509cc4f06db6f48f2207f19c3918
+Activity.SpanId:             345f5f98015b589a
+Activity.TraceFlags:         Recorded
+Activity.ActivitySourceName: Sample.DistributedTracing
+Activity.DisplayName:        SomeWork
+Activity.Kind:               Internal
+Activity.StartTime:          2024-08-27T23:22:44.9894135Z
+Activity.Duration:           00:00:01.6059128
 Resource associated with Activity:
     service.name: MySample
-    service.instance.id: 909a4624-3b2e-40e4-a86b-4a2c8003219e
+    service.instance.id: a87f9e7d-d28c-4a91-9bb3-939a50cac7db
+    telemetry.sdk.name: opentelemetry
+    telemetry.sdk.language: dotnet
+    telemetry.sdk.version: 1.9.0
 
 Example work done
 ```
 
-#### Sources
+##### Sources
 
 In the example code, you invoked `AddSource("Sample.DistributedTracing")` so that OpenTelemetry would
 capture the Activities produced by the ActivitySource that was already present in the code:
@@ -183,7 +301,7 @@ static ActivitySource s_source = new ActivitySource("Sample.DistributedTracing")
 
 Telemetry from any ActivitySource can be captured by calling `AddSource()` with the source's name.
 
-#### Exporters
+##### Exporters
 
 The console exporter is helpful for quick examples or local development but in a production deployment
 you will probably want to send traces to a centralized store. OpenTelemetry supports various destinations using different
@@ -210,7 +328,7 @@ it to the console.
 
 ### Prerequisites
 
-- [.NET Core 2.1 SDK](https://dotnet.microsoft.com/download/dotnet) or a later version
+- [.NET Core 8.0 SDK](https://dotnet.microsoft.com/download/dotnet) or a later version
 
 ### Create an example application
 
@@ -223,10 +341,6 @@ dotnet new console
 Applications that target .NET 5 and later already have the necessary distributed tracing APIs included. For apps targeting older
 .NET versions, add the [System.Diagnostics.DiagnosticSource NuGet package](https://www.nuget.org/packages/System.Diagnostics.DiagnosticSource/)
 version 5 or greater.
-
-```dotnetcli
-dotnet add package System.Diagnostics.DiagnosticSource
-```
 
 Replace the contents of the generated Program.cs with this example source:
 
@@ -249,7 +363,7 @@ namespace Sample.DistributedTracing
 
         static async Task DoSomeWork()
         {
-            using (Activity a = s_source.StartActivity("SomeWork"))
+            using (Activity? a = s_source.StartActivity("SomeWork"))
             {
                 await StepOne();
                 await StepTwo();
@@ -258,7 +372,7 @@ namespace Sample.DistributedTracing
 
         static async Task StepOne()
         {
-            using (Activity a = s_source.StartActivity("StepOne"))
+            using (Activity? a = s_source.StartActivity("StepOne"))
             {
                 await Task.Delay(500);
             }
@@ -266,7 +380,7 @@ namespace Sample.DistributedTracing
 
         static async Task StepTwo()
         {
-            using (Activity a = s_source.StartActivity("StepTwo"))
+            using (Activity? a = s_source.StartActivity("StepTwo"))
             {
                 await Task.Delay(1000);
             }

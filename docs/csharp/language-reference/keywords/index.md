@@ -1,7 +1,7 @@
 ---
-description: "C# Keywords"
-title: "C# Keywords"
-ms.date: 09/15/2022
+description: "C# Keywords: Find the reference material for the predefined keywords and contextual keywords defined in the C# language."
+title: "C# Keywords and contextual keywords"
+ms.date: 08/14/2024
 f1_keywords: 
   - "cs.keywords"
 helpviewer_keywords:
@@ -26,7 +26,7 @@ The first table in this article lists keywords that are reserved identifiers in 
         [`break`](../statements/jump-statements.md#the-break-statement)  
         [`byte`](../builtin-types/integral-numeric-types.md)  
         [`case`](../statements/selection-statements.md#the-switch-statement)  
-        [`catch`](try-catch.md)  
+        [`catch`](../statements/exception-handling-statements.md#the-try-catch-statement)  
         [`char`](../builtin-types/char.md)  
         [`checked`](../statements/checked-and-unchecked.md)  
         [`class`](class.md)  
@@ -45,7 +45,7 @@ The first table in this article lists keywords that are reserved identifiers in 
         [`explicit`](../operators/user-defined-conversion-operators.md)  
         [`extern`](extern.md)  
         [`false`](../builtin-types/bool.md)  
-        [`finally`](try-finally.md)  
+        [`finally`](../statements/exception-handling-statements.md#the-try-finally-statement)  
         [`fixed`](../statements/fixed.md)  
         [`float`](../builtin-types/floating-point-numeric-types.md)  
         [`for`](../statements/iteration-statements.md#the-for-statement)  
@@ -63,13 +63,13 @@ The first table in this article lists keywords that are reserved identifiers in 
     :::column-end:::
     :::column:::
         [`namespace`](namespace.md)  
-        [`new`](../operators/new-operator.md)  
+        [`new`](new.md)  
         [`null`](null.md)  
         [`object`](../builtin-types/reference-types.md)  
         [`operator`](../operators/operator-overloading.md)  
         [`out`](out.md)  
         [`override`](override.md)  
-        [`params`](params.md)  
+        [`params`](method-parameters.md#params-modifier)  
         [`private`](private.md)  
         [`protected`](protected.md)  
         [`public`](public.md)  
@@ -88,9 +88,9 @@ The first table in this article lists keywords that are reserved identifiers in 
         [`struct`](../builtin-types/struct.md)  
         [`switch`](../operators/switch-expression.md)  
         [`this`](this.md)  
-        [`throw`](throw.md)  
+        [`throw`](../statements/exception-handling-statements.md#the-throw-statement)  
         [`true`](../builtin-types/bool.md)  
-        [`try`](try-catch.md)  
+        [`try`](../statements/exception-handling-statements.md#the-try-statement)  
         [`typeof`](../operators/type-testing-and-cast.md#typeof-operator)  
         [`uint`](../builtin-types/integral-numeric-types.md)  
         [`ulong`](../builtin-types/integral-numeric-types.md)  
@@ -112,8 +112,9 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
 :::row:::
     :::column:::
         [`add`](add.md)  
-        [`and`](../operators/patterns.md#logical-patterns)  
+        [`allows`](where-generic-type-constraint.md)  
         [`alias`](extern-alias.md)  
+        [`and`](../operators/patterns.md#logical-patterns)  
         [`ascending`](ascending.md)  
         [`args`](../../fundamentals/program-structure/top-level-statements.md#args)  
         [`async`](async.md)  
@@ -122,10 +123,11 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`descending`](descending.md)  
         [`dynamic`](../builtin-types/reference-types.md)  
         [`equals`](equals.md)  
-        [`file`](file.md)  
-        [`from`](from-clause.md)  
     :::column-end:::
     :::column:::
+        [`field`](field.md)  
+        [`file`](file.md)  
+        [`from`](from-clause.md)  
         [`get`](get.md)  
         [`global`](../operators/namespace-alias-qualifier.md)  
         [`group`](group-clause.md)  
@@ -136,16 +138,16 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`managed` (function pointer calling convention)](../unsafe-code.md#function-pointers)  
         [`nameof`](../operators/nameof.md)  
         [`nint`](../builtin-types/integral-numeric-types.md)  
-        [`not`](../operators/patterns.md#logical-patterns)  
     :::column-end:::
     :::column:::
+        [`not`](../operators/patterns.md#logical-patterns)  
         [`notnull`](../../programming-guide/generics/constraints-on-type-parameters.md#notnull-constraint)  
         [`nuint`](../builtin-types/integral-numeric-types.md)  
         [`on`](on.md)  
         [`or`](../operators/patterns.md#logical-patterns)  
         [`orderby`](orderby-clause.md)  
         [`partial` (type)](partial-type.md)  
-        [`partial` (method)](partial-method.md)  
+        [`partial` (member)](partial-member.md)  
         [`record`](../../fundamentals/types/records.md)  
         [`remove`](remove.md)  
         [`required`](required.md)  
@@ -165,7 +167,3 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`yield`](../statements/yield.md)  
     :::column-end:::
 :::row-end:::
-
-## See also
-
-- [C# reference](../index.md)

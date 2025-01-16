@@ -1,8 +1,9 @@
 ---
 title: Deploy Orleans to Azure Container Apps
 description: Learn how to deploy an updated Orleans shopping cart app to Azure Container Apps.
-ms.date: 07/25/2022
+ms.date: 07/03/2024
 ms.topic: tutorial
+ms.custom: devx-track-bicep
 ---
 
 # Deploy Orleans to Azure Container Apps
@@ -161,7 +162,6 @@ jobs:
 
     - name: Logout of Azure
       run: az logout
-
 ```
 
 The preceding GitHub workflow will:

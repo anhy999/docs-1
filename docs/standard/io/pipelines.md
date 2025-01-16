@@ -1,5 +1,5 @@
 ---
-title: I/O pipelines - .NET
+title: System.IO.Pipelines - .NET
 description: Learn how to efficiently use I/O pipelines in .NET and avoid problems in your code.
 ms.date: 05/09/2022
 helpviewer_keywords:
@@ -63,8 +63,6 @@ To fix the preceding problems, the following changes are required:
 :::code language="csharp" source="snippets/pipelines_1/ProcessLinesAsync.cs" id="snippet":::
 
 The previous code is complex and doesn't address all the problems identified. High-performance networking usually means writing complex code to maximize performance. `System.IO.Pipelines` was designed to make writing this type of code easier.
-
-[!INCLUDE [localized code comments](../../../includes/code-comments-loc.md)]
 
 ## Pipe
 

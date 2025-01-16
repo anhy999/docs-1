@@ -2,6 +2,8 @@
 title: SYSLIB0038 warning - SerializationFormat.Binary is obsolete
 description: Learn about the obsoletion of SerializationFormat.Binary that generates compile-time warning SYSLIB0038.
 ms.date: 03/18/2022
+f1_keywords:
+  - syslib0038
 ---
 # SYSLIB0038: SerializationFormat.Binary is obsolete
 
@@ -45,4 +47,4 @@ For more information, see [Suppress warnings](obsoletions-overview.md#suppress-w
 
 ## See also
 
-- [SerializationFormat.Binary is obsolete](../../core/compatibility/core-libraries/7.0/serializationformat-binary.md)
+- [SerializationFormat.Binary is obsolete](../../core/compatibility/serialization/7.0/serializationformat-binary.md)

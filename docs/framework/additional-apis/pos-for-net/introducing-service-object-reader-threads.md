@@ -3,7 +3,7 @@ title: Introducing Service Object Reader Threads
 description: Introducing Service Object Reader Threads (POS for .NET v1.14 SDK Documentation)
 ms.date: 03/03/2014
 ms.topic: how-to
-ms.custom: pos-restored-from-archive
+ms.custom: "pos-restored-from-archive,UpdateFrequency5"
 ---
 
 # Introducing Service Object Reader Threads (POS for .NET v1.14 SDK Documentation)
@@ -193,7 +193,7 @@ namespace Samples.ServiceObjects.Advanced
                             ErrorCode.Failure);
                 }
 
-                // The thread has started succesfully.
+                // The thread has started successfully.
                 ThreadWasStarted = true;
             }
             catch (Exception e)

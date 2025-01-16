@@ -1,5 +1,8 @@
+items:
 - name: Visual Basic Guide
   href: index.yml
+- name: Visual Basic strategy
+  href: getting-started/strategy.md
 - name: What's New for Visual Basic
   href: whats-new/index.md
 - name: Breaking changes in the compiler
@@ -247,6 +250,8 @@
     href: programming-guide/com-interop/com-interoperability-in-net-framework-applications.md
   - name: "Walkthrough: Implementing Inheritance with COM Objects"
     href: programming-guide/com-interop/walkthrough-implementing-inheritance-with-com-objects.md
+  - name: "Walkthrough: Office programming"
+    href: programming-guide/com-interop/walkthrough-office-programming.md
 - name: Language Reference
   href: language-reference/index.md
   items:
@@ -1099,7 +1104,7 @@
     - name: Lambda expressions are not valid in the first expression of a 'Select Case' statement
       href: language-reference/error-messages/lambda-expressions-are-not-valid-in-the-first-expression-of-select-case.md
     - name: Late bound resolution; runtime errors could occur
-      href: language-reference/error-messages/late-bound-resolution;-runtime-errors-could-occur.md
+      href: language-reference/error-messages/late-bound-resolution-runtime-errors-could-occur.md
     - name: Latebound overload resolution cannot be applied to '<procedurename>' because the accessing instance is an interface type
       href: language-reference/error-messages/latebound-overload-resolution-cannot-be-applied.md
     - name: Leading '.' or '!' can only appear inside a 'With' statement

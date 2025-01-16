@@ -11,7 +11,7 @@ There are two primary concepts in F#: functions and types. This tour emphasizes 
 
 ## Executing the code online
 
-If you don't have F# installed on your machine, you can execute all of the samples in your browser with [Try F# in Fable](https://fable.io/repl3/). Fable is a dialect of F# that executes directly in your browser. To view the samples that follow in the REPL, check out **Samples > Learn > Tour of F#** in the left-hand menu bar of the Fable REPL.
+If you don't have F# installed on your machine, you can execute all of the samples in your browser with [Try F# in Fable](https://fable.io/repl/). Fable is a dialect of F# that executes directly in your browser. To view the samples that follow in the REPL, check out **Samples > Learn > Tour of F#** in the left-hand menu bar of the Fable REPL.
 
 ## Functions and Modules
 
@@ -120,7 +120,7 @@ Because DUs allow you to represent the recursive structure of the tree in the da
 
 [!code-fsharp[PatternMatching](~/samples/snippets/fsharp/tour.fs#L717-L743)]
 
-Something you may have noticed is the use of the `_` pattern.  This is known as the [Wildcard Pattern](language-reference/pattern-matching.md#wildcard-pattern), which is a way of saying "I don't care what something is".  Although convenient, you can accidentally bypass Exhaustive Pattern Matching and no longer benefit from compile-time enforcements if you aren't careful in using `_`.  It is best used when you don't care about certain pieces of a decomposed type when pattern matching, or the final clause when you have enumerated all meaningful cases in a pattern matching expression.
+The following sample introduces the `_` pattern, which you might have noticed before. This is known as the [Wildcard Pattern](language-reference/pattern-matching.md#wildcard-pattern), which is a way of saying "I don't care what something is". Although convenient, you can accidentally bypass Exhaustive Pattern Matching and no longer benefit from compile-time enforcements if you aren't careful in using `_`. It is best used when you don't care about certain pieces of a decomposed type when pattern matching, or the final clause when you have enumerated all meaningful cases in a pattern matching expression.
 
 In the following example, the `_` case is used when a parse operation fails.
 

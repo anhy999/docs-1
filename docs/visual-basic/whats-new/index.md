@@ -8,11 +8,12 @@ helpviewer_keywords:
   - "new features, Visual Basic"
   - "what's new [Visual Basic]"
   - "Visual Basic, what's new"
-ms.assetid: d7e97396-7f42-4873-a81c-4ebcc4b6ca02
+ms.custom: UpdateFrequency1
+ms.topic: whats-new
 ---
 # What's new for Visual Basic
 
-This topic lists key feature names for each version of Visual Basic, with detailed descriptions of the new and enhanced features in the latest versions of the language.
+This article lists key feature names for each version of Visual Basic, with detailed descriptions of the new and enhanced features in the latest versions of the language.
 
 ## Current version
 
@@ -45,7 +46,7 @@ Visual Basic / Visual Studio 2012\
 `Async` and `await` keywords, iterators, caller info attributes
 
 Visual Basic, Visual Studio 2010\
-Auto-implemented properties, collection initializers, implicit line continuation, dynamic, generic co/contra variance, global namespace access
+Automatically implemented properties, collection initializers, implicit line continuation, dynamic, generic co/contra variance, global namespace access
 
 Visual Basic / Visual Studio 2008\
 Language Integrated Query (LINQ), XML literals, local type inference, object initializers, anonymous types, extension methods, local `var` type inference, lambda expressions, `if` operator, partial methods, nullable value types

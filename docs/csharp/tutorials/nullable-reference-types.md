@@ -2,8 +2,7 @@
 title: Design with nullable reference types
 description: This advanced tutorial provides an introduction to nullable reference types. You'll learn to express your design intent on when reference values may be null, and have the compiler enforce when they cannot be null.
 ms.date: 11/01/2022
-ms.technology: csharp-null-safety
-recommendations: false
+ms.subservice: null-safety
 ---
 # Tutorial: Express your design intent more clearly with nullable and non-nullable reference types
 
@@ -32,7 +31,7 @@ The code you'll write for this sample expresses that intent, and the compiler en
 
 ## Create the application and enable nullable reference types
 
-Create a new console application either in Visual Studio or from the command line using `dotnet new console`. Name the application `NullableIntroduction`. Once you've created the application, you'll need to specify that the entire project compiles in an enabled **nullable annotation context**. Open the *.csproj* file and add a `Nullable` element to the `PropertyGroup` element. Set its value to `enable`. You must opt into the **nullable reference types** feature in projects earlier than C# 11. That's because once the feature is turned on, existing reference variable declarations become **non-nullable reference types**. While that decision will help find issues where existing code may not have proper null-checks, it may not accurately reflect your original design intent:
+Create a new console application either in Visual Studio or from the command line using `dotnet new console`. Name the application `NullableIntroduction`. Once you've created the application, you'll need to specify that the entire project compiles in an enabled **nullable annotation context**. Open the *.csproj* file and add a `Nullable` element to the `PropertyGroup` element. Set its value to `enable`. You must opt in to the **nullable reference types** feature in projects earlier than C# 11. That's because once the feature is turned on, existing reference variable declarations become **non-nullable reference types**. While that decision will help find issues where existing code may not have proper null-checks, it may not accurately reflect your original design intent:
 
 ```xml
 <Nullable>enable</Nullable>

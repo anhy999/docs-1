@@ -9,7 +9,7 @@ SQLite doesn't support encrypting database files by default. Instead, you need t
 
 ## Installation
 
-### [.NET Core CLI](#tab/netcore-cli)
+### [.NET CLI](#tab/net-cli)
 
 ```dotnetcli
 dotnet remove package Microsoft.Data.Sqlite
@@ -34,6 +34,8 @@ For more information about using a different native library for encryption, see 
 To enable encryption on a new database, specify the key using the `Password` connection string keyword. Use <xref:Microsoft.Data.Sqlite.SqliteConnectionStringBuilder> to add or update the value from user input and avoid connection string injection attacks.
 
 [!code-csharp[](../../../../samples/snippets/standard/data/sqlite/EncryptionSample/Program.cs?name=snippet_ConnectionStringBuilder)]
+
+[!INCLUDE [managed-identities](../../../includes/managed-identities.md)]
 
 > [!TIP]
 > The method for encrypting and decrypting existing databases varies depending on which solution you're using. For example, you need to use the `sqlcipher_export()` function on SQLCipher. Check your solution's documentation for details.

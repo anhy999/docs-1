@@ -153,8 +153,6 @@ The answer to this question is **no** if...
 
 ## Essential LINQ
 
-For a truly comprehensive list of LINQ samples, visit [101 LINQ Samples](/samples/dotnet/try-samples/101-linq-samples/).
-
 The following examples are a quick demonstration of some of the essential pieces of LINQ. This is in no way comprehensive, as LINQ provides more functionality than what is showcased here.
 
 ### The bread and butter - `Where`, `Select`, and `Aggregate`
@@ -177,7 +175,7 @@ var queryCats = from dog in dogs
 
 // Summing the lengths of a set of strings.
 int seed = 0;
-int sumOfStrings = strings.Aggregate(seed, (s1, s2) => s1.Length + s2.Length);
+int sumOfStrings = strings.Aggregate(seed, (partialSum, nextString) => partialSum + nextString.Length);
 ```
 
 ```vb
@@ -198,7 +196,7 @@ Dim queryCats = From dog In dogs
 
 ' Summing the lengths of a set of strings.
 Dim seed As Integer = 0
-Dim sumOfStrings As Integer = strings.Aggregate(seed, Function(s1, s2) s1.Length + s2.Length)
+Dim sumOfStrings As Integer = strings.Aggregate(seed, Function(partialSum, nextString) partialSum + nextString.Length)
 ```
 
 ### Flattening a list of lists
@@ -245,7 +243,6 @@ public class DogHairLengthComparer : IEqualityComparer<Dog>
 
 // Gets all the short-haired dogs between two different kennels.
 var allShortHairedDogs = kennel1.Dogs.Union(kennel2.Dogs, new DogHairLengthComparer());
-
 ```
 
 ```vb
@@ -388,6 +385,5 @@ Parallelizable CPU-bound jobs that can be easily expressed via LINQ (in other wo
 
 ## More resources
 
-* [101 LINQ Samples](/samples/dotnet/try-samples/101-linq-samples/)
 * [Linqpad](https://www.linqpad.net/), a playground environment and Database querying engine for C#/F#/Visual Basic
 * [EduLinq](https://codeblog.jonskeet.uk/2011/02/23/reimplementing-linq-to-objects-part-45-conclusion-and-list-of-posts/), an e-book for learning how LINQ-to-objects is implemented

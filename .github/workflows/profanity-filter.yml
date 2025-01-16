@@ -1,0 +1,32 @@
+name: Profanity filter
+
+on:
+  issue_comment:
+    types: [created, edited]
+  issues:
+    types: [opened, edited, reopened]
+  pull_request:
+    types: [opened, edited, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  apply-filter:
+    name: Apply profanity filter
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+      with:
+        egress-policy: audit
+
+    - name: Profanity filter
+      if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'github-actions[bot]'  }}
+      uses: IEvangelist/profanity-filter@e370e4ba671feb530a5481b4595413c7fd032b9b # main
+      id: profanity-filter
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        replacement-strategy: redacted-rectangle

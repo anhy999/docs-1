@@ -3,12 +3,12 @@ title: Use the IHttpClientFactory
 description: Learn how to use the HttpClient and IHttpClientFactory implementations with dependency injection in your .NET workloads.
 author: IEvangelist
 ms.author: dapine
-ms.date: 11/15/2022
+ms.date: 08/13/2024
 ---
 
 # IHttpClientFactory with .NET
 
-In this article, you'll learn how to use the `IHttpClientFactory` to create `HttpClient` types with various .NET fundamentals, such as dependency injection (DI), logging, and configuration. The <xref:System.Net.Http.HttpClient> type was introduced in .NET Framework 4.5, which was released in 2012. In other words, it's been around for a while. `HttpClient` is used for making HTTP requests and handling HTTP responses from web resources identified by a <xref:System.Uri>. The HTTP protocol makes up the vast majority of all internet traffic.
+In this article, you'll learn how to use the `IHttpClientFactory` interface to create `HttpClient` types with various .NET fundamentals, such as dependency injection (DI), logging, and configuration. The <xref:System.Net.Http.HttpClient> type was introduced in .NET Framework 4.5, which was released in 2012. In other words, it's been around for a while. `HttpClient` is used for making HTTP requests and handling HTTP responses from web resources identified by a <xref:System.Uri>. The HTTP protocol makes up the vast majority of all internet traffic.
 
 With modern application development principles driving best practices, the <xref:System.Net.Http.IHttpClientFactory> serves as a factory abstraction that can create `HttpClient` instances with custom configurations. <xref:System.Net.Http.IHttpClientFactory> was introduced in .NET Core 2.1. Common HTTP-based .NET workloads can take advantage of resilient and transient-fault-handling third-party middleware with ease.
 
@@ -20,7 +20,7 @@ With modern application development principles driving best practices, the <xref
 
 ## The `IHttpClientFactory` type
 
-All of the sample source code in this article relies on the [`Microsoft.Extensions.Http`](https://www.nuget.org/packages/microsoft.extensions.http) NuGet package. Additionally, [The Internet Chuck Norris Database](https://www.icndb.com) free API is used to make HTTP `GET` requests for "nerdy" jokes.
+All of the sample source code provided in this article requires the installation of the [`Microsoft.Extensions.Http`](https://www.nuget.org/packages/microsoft.extensions.http) NuGet package. Furthermore, the code examples demonstrate the usage of HTTP `GET` requests to retrieve user `Todo` objects from the free [{JSON} Placeholder](https://jsonplaceholder.typicode.com/) API.
 
 When you call any of the <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient%2A> extension methods, you're adding the `IHttpClientFactory` and related services to the <xref:Microsoft.Extensions.DependencyInjection.IServiceCollection>. The `IHttpClientFactory` type offers the following benefits:
 
@@ -50,7 +50,7 @@ To register the `IHttpClientFactory`, call `AddHttpClient`:
 
 Consuming services can require the `IHttpClientFactory` as a constructor parameter with [DI][di]. The following code uses `IHttpClientFactory` to create an `HttpClient` instance:
 
-:::code source="snippets/http/basic/JokeService.cs" highlight="9,13,15,20":::
+:::code source="snippets/http/basic/TodoService.cs" highlight="9,15,21-23":::
 
 Using `IHttpClientFactory` like in the preceding example is a good way to refactor an existing app. It has no impact on how `HttpClient` is used. In places where `HttpClient` instances are created in an existing app, replace those occurrences with calls to <xref:System.Net.Http.IHttpClientFactory.CreateClient%2A>.
 
@@ -59,16 +59,16 @@ Using `IHttpClientFactory` like in the preceding example is a good way to refact
 Named clients are a good choice when:
 
 - The app requires many distinct uses of `HttpClient`.
-- Many `HttpClient` instances have different configuration.
+- Many `HttpClient` instances have different configurations.
 
-Configuration for a named `HttpClient` can be specified during registration in `ConfigureServices`:
+Configuration for a named `HttpClient` can be specified during registration on the `IServiceCollection`:
 
-:::code source="snippets/http/named/Program.cs" range="1-23" highlight="10-20":::
+:::code source="snippets/http/named/Program.cs" range="1-21" highlight="9-21":::
 
 In the preceding code, the client is configured with:
 
-- A name that's pulled from the configuration under the `"JokeHttpClientName"`.
-- The base address `https://api.icndb.com/`.
+- A name that's pulled from the configuration under the `"TodoHttpClientName"`.
+- The base address `https://jsonplaceholder.typicode.com/`.
 - A `"User-Agent"` header.
 
 You can use configuration to specify HTTP client names, which is helpful to avoid misnaming clients when adding and creating. In this example, the *appsettings.json* file is used to configure the HTTP client name:
@@ -86,7 +86,7 @@ Each time <xref:System.Net.Http.IHttpClientFactory.CreateClient%2A> is called:
 
 To create a named client, pass its name into `CreateClient`:
 
-:::code source="snippets/http/named/JokeService.cs" highlight="10,15,18-19,24-25,31-33":::
+:::code source="snippets/http/named/TodoService.cs" highlight="11,16,19-20,25-26,32-34":::
 
 In the preceding code, the HTTP request doesn't need to specify a hostname. The code can pass just the path, since the base address configured for the client is used.
 
@@ -103,49 +103,50 @@ Typed clients:
 
 A typed client accepts an `HttpClient` parameter in its constructor:
 
-:::code source="snippets/http/typed/JokeService.cs" highlight="9,13,15,23-25":::
+:::code source="snippets/http/typed/TodoService.cs" highlight="9,18-20":::
 
 In the preceding code:
 
 - The configuration is set when the typed client is added to the service collection.
 - The `HttpClient` is assigned as a class-scoped variable (field), and used with exposed APIs.
 
-API-specific methods can be created that expose `HttpClient` functionality. For example, the `GetRandomJokeAsync` method encapsulates code to retrieve a random joke.
+API-specific methods can be created that expose `HttpClient` functionality. For example, the `GetUserTodosAsync` method encapsulates code to retrieve user-specific `Todo` objects.
 
-The following code calls <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient%2A> in `ConfigureServices` to register a typed client class:
+The following code calls <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient%2A> to register a typed client class:
 
-:::code source="snippets/http/typed/Program.cs" range="1-22" highlight="9-17":::
+:::code source="snippets/http/typed/Program.cs" range="1-17" highlight="9-17":::
 
-The typed client is registered as transient with DI. In the preceding code, `AddHttpClient` registers `JokeService` as a transient service. This registration uses a factory method to:
+The typed client is registered as transient with DI. In the preceding code, `AddHttpClient` registers `TodoService` as a transient service. This registration uses a factory method to:
 
 1. Create an instance of `HttpClient`.
-1. Create an instance of `JokeService`, passing in the instance of `HttpClient` to its constructor.
+1. Create an instance of `TodoService`, passing in the instance of `HttpClient` to its constructor.
 
 > [!IMPORTANT]
-> Using typed clients in singleton services can be dangerous. For more information, see the [Using Typed clients in singleton services](#use-typed-clients-in-singleton-services) section.
+> Using typed clients in singleton services can be dangerous. For more information, see the [Avoid Typed clients in singleton services](#avoid-typed-clients-in-singleton-services) section.
+
+> [!NOTE]
+> When registering a typed client with the `AddHttpClient<TClient>` method, the `TClient` type must have a constructor that accepts an `HttpClient` as a parameter. Additionally, the `TClient` type shouldn't be registered with the DI container separately, as this will lead to the later registration overwriting the former.
 
 ### Generated clients
 
 `IHttpClientFactory` can be used in combination with third-party libraries such as [Refit](https://github.com/paulcbetts/refit). Refit is a REST library for .NET. It allows for declarative REST API definitions, mapping interface methods to endpoints. An implementation of the interface is generated dynamically by the `RestService`, using `HttpClient` to make the external HTTP calls.
 
-Consider the following `record` types:
+Consider the following `record` type:
 
-:::code source="snippets/http/shared/IdentifiableJokeValue.cs":::
-
-:::code source="snippets/http/shared/ChuckNorrisJoke.cs":::
+:::code source="snippets/http/shared/Todo.cs":::
 
 The following example relies on the [`Refit.HttpClientFactory`](https://www.nuget.org/packages/refit.httpclientfactory) NuGet package, and is a simple interface:
 
-:::code source="snippets/http/generated/IJokeService.cs":::
+:::code source="snippets/http/generated/ITodoService.cs":::
 
 The preceding C# interface:
 
-- Defines a method named `GetRandomJokeAsync` that returns a `Task<ChuckNorrisJoke>` instance.
+- Defines a method named `GetUserTodosAsync` that returns a `Task<Todo[]>` instance.
 - Declares a `Refit.GetAttribute` attribute with the path and query string to the external API.
 
 A typed client can be added, using Refit to generate the implementation:
 
-:::code source="snippets/http/generated/Program.cs" range="1-22" highlight="11-19":::
+:::code source="snippets/http/generated/Program.cs" range="1-18" highlight="10-18":::
 
 The defined interface can be consumed where necessary, with the implementation provided by DI and Refit.
 
@@ -158,7 +159,7 @@ In the preceding examples, all HTTP requests use the `GET` HTTP verb. `HttpClien
 - `DELETE`
 - `PATCH`
 
-For a complete list of supported HTTP verbs, see <xref:System.Net.Http.HttpMethod>.
+For a complete list of supported HTTP verbs, see <xref:System.Net.Http.HttpMethod>. For more information on making HTTP requests, see [Send a request using HttpClient](../../fundamentals/networking/http/httpclient.md).
 
 The following example shows how to make an HTTP `POST` request:
 
@@ -213,23 +214,13 @@ Keeping a single `HttpClient` instance alive for a long duration is a common pat
 
 ## Configure the `HttpMessageHandler`
 
-It may be necessary to control the configuration of the inner `HttpMessageHandler` used by a client.
+It may be necessary to control the configuration of the inner <xref:System.Net.Http.HttpMessageHandler> used by a client.
 
 An <xref:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> is returned when adding named or typed clients. The <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.ConfigurePrimaryHttpMessageHandler%2A> extension method can be used to define a delegate on the `IServiceCollection`. The delegate is used to create and configure the primary `HttpMessageHandler` used by that client:
 
-```csharp
-services.AddHttpClient("Named.Client")
-    .ConfigurePrimaryHttpMessageHandler(() =>
-    {
-        return new HttpClientHandler
-        {
-            AllowAutoRedirect = false,
-            UseDefaultCredentials = true
-        };
-    });
-```
+:::code source="snippets/http/configurehandler/Program.cs" id="configurehandler":::
 
-Configuring the `HttClientHandler` lets you specify a proxy for the `HttpClient` instance. For more information, see [Proxy per client](../../fundamentals/networking/http/httpclient.md#http-proxy).
+Configuring the `HttClientHandler` lets you specify a proxy for the `HttpClient` instance among various other properties of the handler. For more information, see [Proxy per client](../../fundamentals/networking/http/httpclient.md#http-proxy).
 
 ### Additional configuration
 
@@ -240,12 +231,12 @@ There are several additional configuration options for controlling the `IHttpCli
 | <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.AddHttpMessageHandler%2A> | Adds an additional message handler for a named `HttpClient`. |
 | <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.AddTypedClient%2A> | Configures the binding between the `TClient` and the named `HttpClient` associated with the `IHttpClientBuilder`. |
 | <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.ConfigureHttpClient%2A> | Adds a delegate that will be used to configure a named `HttpClient`. |
-| <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.ConfigureHttpMessageHandlerBuilder%2A> | Adds a delegate that will be used to configure message handlers using <xref:Microsoft.Extensions.Http.HttpMessageHandlerBuilder> for a named `HttpClient`. |
 | <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.ConfigurePrimaryHttpMessageHandler%2A> | Configures the primary `HttpMessageHandler` from the dependency injection container for a named `HttpClient`. |
 | <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.RedactLoggedHeaders%2A> | Sets the collection of HTTP header names for which values should be redacted before logging. |
 | <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.SetHandlerLifetime%2A> | Sets the length of time that a `HttpMessageHandler` instance can be reused. Each named client can have its own configured handler lifetime value. |
+| <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.UseSocketsHttpHandler%2A> | Configures a new or a previously added `SocketsHttpHandler` instance from the dependency injection container to be used as a primary handler for a named `HttpClient`. (.NET 5+ only) |
 
-## Using HttpClientFactory together with SocketsHttpHandler
+## Using IHttpClientFactory together with SocketsHttpHandler
 
 The `SocketsHttpHandler` implementation of `HttpMessageHandler` was added in .NET Core 2.1, which allows `PooledConnectionLifetime` to be configured. This setting is used to ensure that the handler reacts to DNS changes, so using `SocketsHttpHandler` is considered to be an alternative to using `IHttpClientFactory`. For more information, see [Guidelines for using HTTP clients](../../fundamentals/networking/http/httpclient-guidelines.md).
 
@@ -253,22 +244,20 @@ However, `SocketsHttpHandler` and `IHttpClientFactory` can be used together impr
 
 To use both APIs:
 
-1. Specify `SocketsHttpHandler` as `PrimaryHandler` and set up its `PooledConnectionLifetime` (for example, to a value that was previously in `HandlerLifetime`).
-1. As `SocketsHttpHandler` will handle connection pooling and recycling, then handler recycling at the `IHttpClientFactory` level is not needed anymore. You can disable it by setting `HandlerLifetime` to `Timeout.InfiniteTimeSpan`.
+1. Specify `SocketsHttpHandler` as `PrimaryHandler` via <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.ConfigurePrimaryHttpMessageHandler%2A>, or <xref:Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.UseSocketsHttpHandler%2A> (.NET 5+ only).
+1. Set up <xref:System.Net.Http.SocketsHttpHandler.PooledConnectionLifetime?displayProperty=nameWithType> based on the interval you expect DNS to be updated; for example, to a value that was previously in `HandlerLifetime`.
+1. (Optional) Since `SocketsHttpHandler` will handle connection pooling and recycling, handler recycling at the `IHttpClientFactory` level is no longer needed. You can disable it by setting `HandlerLifetime` to `Timeout.InfiniteTimeSpan`.
 
 ```csharp
 services.AddHttpClient(name)
-    .ConfigurePrimaryHttpMessageHandler(() =>
-    {
-        return new SocketsHttpHandler()
-        {
-            PooledConnectionLifetime = TimeSpan.FromMinutes(2)
-        };
-    })
+    .UseSocketsHttpHandler((handler, _) =>
+        handler.PooledConnectionLifetime = TimeSpan.FromMinutes(2)) // Recreate connection every 2 minutes
     .SetHandlerLifetime(Timeout.InfiniteTimeSpan); // Disable rotation, as it is handled by PooledConnectionLifetime
 ```
 
-## Use typed clients in singleton services
+In the example above, 2 minutes were chosen arbitrarily for illustration purposes, aligning to a default `HandlerLifetime` value. You should choose the value based on the expected frequency of DNS or other network changes. For more information, see the [DNS behavior](../../fundamentals/networking/http/httpclient-guidelines.md#dns-behavior) section in the `HttpClient` guidelines, and the Remarks section in the <xref:System.Net.Http.SocketsHttpHandler.PooledConnectionLifetime> API documentation.
+
+## Avoid typed clients in singleton services
 
 When using the _named client_ approach, `IHttpClientFactory` is injected into services, and `HttpClient` instances are created by calling <xref:System.Net.Http.IHttpClientFactory.CreateClient%2A> every time an `HttpClient` is needed.
 
@@ -280,7 +269,7 @@ However, with the _typed client_ approach, typed clients are transient objects u
 If you need to use `HttpClient` instances in a singleton service, consider the following options:
 
 - Use the _named client_ approach instead, injecting `IHttpClientFactory` in the singleton service and recreating `HttpClient` instances when necessary.
-- If you require the _typed client_ approach, use `SocketsHttpHandler` with configured `PooledConnectionLifetime` as a primary handler. For more information on using `SocketsHttpHandler` with `IHttpClientFactory`, see the section [Using HttpClientFactory together with SocketsHttpHandler](#using-httpclientfactory-together-with-socketshttphandler).
+- If you require the _typed client_ approach, use `SocketsHttpHandler` with configured `PooledConnectionLifetime` as a primary handler. For more information on using `SocketsHttpHandler` with `IHttpClientFactory`, see the section [Using IHttpClientFactory together with SocketsHttpHandler](#using-ihttpclientfactory-together-with-socketshttphandler).
 
 ## Message Handler Scopes in IHttpClientFactory
 
@@ -290,16 +279,33 @@ If you need to use `HttpClient` instances in a singleton service, consider the f
 
 Users are strongly advised **not to cache scope-related information** (such as data from `HttpContext`) inside `HttpMessageHandler` instances and use scoped dependencies with caution to avoid leaking sensitive information.
 
+If you require access to an app DI scope from your message handler, for authentication as an example, you'd encapsulate scope-aware logic in a separate transient `DelegatingHandler`, and wrap it around an `HttpMessageHandler` instance from the `IHttpClientFactory` cache. To access the handler call <xref:System.Net.Http.IHttpMessageHandlerFactory.CreateHandler%2A?displayProperty=nameWithType> for any registered _named client_. In that case, you'd create an `HttpClient` instance yourself using the constructed handler.
+
+:::image type="content" source="media/httpclientfactory-scopes-workaround.png" alt-text="Diagram showing gaining access to app DI scopes via a separate transient message handler and IHttpMessageHandlerFactory":::
+
+The following example shows creating an `HttpClient` with a scope-aware `DelegatingHandler`:
+
+:::code source="snippets/http/scopeworkaround/ScopeAwareHttpClientFactory.cs" id="CreateClient":::
+
+A further workaround can follow with an extension method for registering a scope-aware `DelegatingHandler` and overriding default `IHttpClientFactory` registration by a transient service with access to the current app scope:
+
+:::code source="snippets/http/scopeworkaround/ScopeAwareHttpClientFactory.cs" id="AddScopeAwareHttpHandler":::
+
+For more information, see the [full example](https://github.com/dotnet/docs/tree/main/docs/core/extensions/snippets/http/scopeworkaround).
+
 ## See also
 
+- [Common `IHttpClientFactory` usage issues][hcf-issues]
 - [Dependency injection in .NET][di]
 - [Logging in .NET][logging]
 - [Configuration in .NET][config]
 - <xref:System.Net.Http.IHttpClientFactory>
+- <xref:System.Net.Http.IHttpMessageHandlerFactory>
 - <xref:System.Net.Http.HttpClient>
 - [Make HTTP requests with the HttpClient][httpclient]
 - [Implement HTTP retry with exponential backoff][http-retry]
 
+[hcf-issues]: httpclient-factory-troubleshooting.md
 [di]: dependency-injection.md
 [logging]: logging.md
 [config]: configuration.md

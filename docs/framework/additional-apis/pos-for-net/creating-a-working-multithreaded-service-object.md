@@ -3,7 +3,7 @@ title: Creating a Working, Multithreaded Service Object
 description: Creating a Working, Multithreaded Service Object (POS for .NET v1.14 SDK Documentation)
 ms.date: 03/03/2014
 ms.topic: how-to
-ms.custom: pos-restored-from-archive
+ms.custom: "pos-restored-from-archive,UpdateFrequency5"
 ---
 
 # Creating a Working, Multithreaded Service Object (POS for .NET v1.14 SDK Documentation)
@@ -432,7 +432,7 @@ namespace Samples.ServiceObjects.Advanced.MSR
                 MsrTrackData data = new MsrTrackData();
 
                 // Modify the track data as appropriate for your SO.
-                // Remove the sentinal characters from the track data,
+                // Remove the sentinel characters from the track data,
                 // for example.
                 data.Track1Data = (byte[])track1Data.Clone();
                 data.Track2Data = (byte[])track2Data.Clone();

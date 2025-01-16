@@ -1,16 +1,14 @@
 ---
 title: Heterogeneous silos overview
 description: Learn an overview of the supported heterogeneous silos in .NET Orleans.
-ms.date: 03/16/2022
+ms.date: 07/03/2024
 ---
 
 # Heterogeneous silos overview
 
 On a given cluster, silos can support a different set of grain types:
 
-<!-- TODO:
-![](~/images/heterogeneous.png)
--->
+:::image type="content" source="media/heterogeneous.png" alt-text="Heterogeneous silos overview diagram.":::
 
 In this example the cluster supports grains of type `A`, `B`, `C`, `D`, `E`:
 

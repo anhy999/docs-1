@@ -58,7 +58,7 @@ The following list summarizes important CLR memory concepts:
 
 ### Memory allocation
 
-When you initialize a new process, the runtime reserves a contiguous region of address space for the process. This reserved address space is called the managed heap. The managed heap maintains a pointer to the address where the next object in the heap will be allocated. Initially, this pointer is set to the managed heap's base address. All reference types are allocated on the managed heap. When an application creates the first reference type, memory is allocated for the type at the base address of the managed heap. When the application creates the next object, the garbage collector allocates memory for it in the address space immediately following the first object. As long as address space is available, the garbage collector continues to allocate space for new objects in this manner.
+When you initialize a new process, the runtime reserves a contiguous region of address space for the process. This reserved address space is called the managed heap. The managed heap maintains a pointer to the address where the next object in the heap will be allocated. Initially, this pointer is set to the managed heap's base address. All reference types are allocated on the managed heap. When an application creates the first reference type, memory is allocated for the type at the base address of the managed heap. When the application creates the next object, the runtime allocates memory for it in the address space immediately following the first object. As long as address space is available, the runtime continues to allocate space for new objects in this manner.
 
 Allocating memory from the managed heap is faster than unmanaged memory allocation. Because the runtime allocates memory for an object by adding a value to a pointer, it's almost as fast as allocating memory from the stack. In addition, because new objects that are allocated consecutively are stored contiguously in the managed heap, an application can access the objects quickly.
 
@@ -180,7 +180,7 @@ A garbage collection has the following phases:
   Ordinarily, the large object heap (LOH) isn't compacted because copying large objects imposes a performance penalty. However, in .NET Core and in .NET Framework 4.5.1 and later, you can use the <xref:System.Runtime.GCSettings.LargeObjectHeapCompactionMode%2A?displayProperty=nameWithType> property to compact the large object heap on demand. In addition, the LOH is automatically compacted when a hard limit is set by specifying either:
 
   - A memory limit on a container.
-  - The [GCHeapHardLimit](../../core/runtime-config/garbage-collector.md#heap-limit) or [GCHeapHardLimitPercent](../../core/runtime-config/garbage-collector.md#heap-limit-percent) runtime configuration options.
+  - The [GCHeapHardLimit](../../core/runtime-config/garbage-collector.md#heap-hard-limit) or [GCHeapHardLimitPercent](../../core/runtime-config/garbage-collector.md#heap-hard-limit-percent) runtime configuration options.
 
 The garbage collector uses the following information to determine whether objects are live:
 

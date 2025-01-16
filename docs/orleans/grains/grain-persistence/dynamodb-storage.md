@@ -1,7 +1,7 @@
 ---
 title: Amazon DynamoDB grain persistence
 description: Learn about Azure DynamoDB grain persistence in .NET Orleans.
-ms.date: 03/15/2022
+ms.date: 07/03/2024
 ---
 
 # Amazon DynamoDB grain persistence
@@ -21,11 +21,11 @@ siloBuilder.AddDynamoDBGrainStorage(
     name: "profileStore",
     configureOptions: options =>
     {
-        options.UseJson = true;
         options.AccessKey = "<DynamoDB access key>";
         options.SecretKey = "<DynamoDB secret key>";
         options.Service = "<DynamoDB region name>"; // Such as "us-west-2"
     });
+);
 ```
 
 If your authentication method requires a token or non-default profile name, you can define those properties using the following command:
@@ -64,4 +64,4 @@ siloBuilder.AddDynamoDBGrainStorage(
   });
 ```
 
-For more information on AWS credentials and named profiles, see [AWS Credentials](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html#creds-locate) and [Named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) in the AWS SDK for .NET Developer Guide.
+For more information on AWS credentials and named profiles, see [AWS Credentials](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html#creds-locate) and [Named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-using-profiles) in the AWS documentation.

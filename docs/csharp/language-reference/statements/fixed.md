@@ -1,7 +1,7 @@
 ---
-title: "fixed statement - C# reference"
-description: "Use the C# fixed statement to pin a moveable variable for the duration of the statement."
-ms.date: 09/09/2022
+title: "fixed statement - pin a moveable variable"
+description: "Use the C# `fixed` statement to pin a moveable variable and declare a pointer to that variable. The address of a pinned variable doesn't change during execution of the statement."
+ms.date: 11/22/2022
 f1_keywords: 
   - "fixed_CSharpKeyword"
   - "fixed"
@@ -9,13 +9,11 @@ helpviewer_keywords:
   - "fixed statement [C#]"
   - "fixed keyword [C#]"
 ---
-# fixed statement (C# reference)
+# fixed statement - pin a variable for pointer operations
 
-The `fixed` statement prevents the [garbage collector](../../../standard/garbage-collection/index.md) from relocating a moveable variable and declares a pointer to that variable:
+The `fixed` statement prevents the [garbage collector](../../../standard/garbage-collection/index.md) from relocating a moveable variable and declares a pointer to that variable. The address of a fixed, or pinned, variable doesn't change during execution of the statement. You can use the declared pointer only inside the corresponding `fixed` statement. The declared pointer is readonly and can't be modified:
 
 :::code language="csharp" source="snippets/fixed/Program.cs" id="PinnedArray":::
-
-The address of a fixed, or pinned, variable doesn't change for the duration of the statement. You can use the declared pointer only inside the corresponding `fixed` statement. The declared pointer is readonly and cannot be modified.
 
 > [!NOTE]
 > You can use the `fixed` statement only in an [unsafe](../keywords/unsafe.md) context. The code that contains unsafe blocks must be compiled with the [**AllowUnsafeBlocks**](../compiler-options/language.md#allowunsafeblocks) compiler option.
@@ -51,14 +49,11 @@ You can also use the `fixed` keyword to declare a [fixed-size buffer](../unsafe-
 
 For more information, see the following sections of the [C# language specification](~/_csharpstandard/standard/README.md):
 
-- [The fixed statement](~/_csharpstandard/standard/unsafe-code.md#227-the-fixed-statement)
-- [Fixed and moveable variables](~/_csharpstandard/standard/unsafe-code.md#224-fixed-and-moveable-variables)
-
-For information about the pattern-based `fixed` statement, see the [Pattern-based `fixed` statement](~/_csharplang/proposals/csharp-7.3/pattern-based-fixed.md) feature proposal note.
+- [The fixed statement](~/_csharpstandard/standard/unsafe-code.md#237-the-fixed-statement)
+- [Fixed and moveable variables](~/_csharpstandard/standard/unsafe-code.md#234-fixed-and-moveable-variables)
 
 ## See also
 
-- [C# reference](../index.md)
 - [Unsafe code, pointer types, and function pointers](../unsafe-code.md)
-- [Pointer related operators](../operators/pointer-related-operators.md)
+- [Pointer-related operators](../operators/pointer-related-operators.md)
 - [unsafe](../keywords/unsafe.md)

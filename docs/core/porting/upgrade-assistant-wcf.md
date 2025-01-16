@@ -1,22 +1,25 @@
 ---
-title: Upgrade WCF Server-side Project to use CoreWCF on .NET 6
-description: Use the .NET Upgrade Assistant to upgrade an existing WCF Server-side project on .NET Framework to use CoreWCF services on .NET 6.
+title: Upgrade WCF Server-side Project to CoreWCF
+description: Use .NET Upgrade Assistant to upgrade an existing WCF Server-side project on .NET Framework to use CoreWCF services on .NET 6 or later.
 author: SimonaLiao
-ms.date: 09/01/2022
----
-# Upgrade a WCF Server-side Project to use CoreWCF on .NET 6
+ms.date: 10/08/2024
 
-The [.NET Upgrade Assistant](upgrade-assistant-overview.md) is a command-line tool that can assist with upgrading an existing WCF Server-side project on .NET Framework to use CoreWCF services on .NET 6. This article provides:
+---
+
+# Upgrade a WCF Server-side Project to CoreWCF
+
+The .NET Upgrade Assistant is a command-line tool that can assist with upgrading an existing WCF Server-side project on .NET Framework to use CoreWCF services on .NET 6. This article provides:
 
 - Things to know before starting.
 - A demonstration of how to run the tool against a WCF Server-side project on .NET Framework.
 - Troubleshooting tips.
 
-For more information on how to install the tool, see [Overview of the .NET Upgrade Assistant](upgrade-assistant-overview.md).
-
 ## Things to know before starting
 
 This tool currently supports C# projects and uses [CoreWCF](https://github.com/corewcf/corewcf) to port self-hosted WCF Server-side projects to .NET 6.
+
+> [!IMPORTANT]
+> Upgrading WCF projects requires a legacy version of .NET Upgrade Assistant and isn't compatible with the latest versions. Instructions on how to install the legacy version are provided in the [Install the legacy version](#install-the-legacy-version) section.
 
 For a WCF project to be applicable for this upgrade, it must meet the following requirements:
 
@@ -32,6 +35,28 @@ The current version of the tool does not support WCF projects hosted via .svc fi
 > If your project is not applicable for this tool, we recommend you take a look at the [CoreWCF walkthrough guide](https://github.com/CoreWCF/CoreWCF/blob/main/Documentation/Walkthrough.md) and
 [BeanTrader Sample demo](https://devblogs.microsoft.com/dotnet/upgrading-a-wcf-service-to-dotnet-6/) and manually update the project.
 
+## Prerequisites
+
+- Windows Operating System
+- [Visual Studio 2022 version 17.1 or newer](https://visualstudio.microsoft.com/downloads/).
+- [.NET SDK 6 or later](https://dotnet.microsoft.com/download/dotnet/).
+- Version `0.4.421302` of .NET Upgrade Assistant, known as the "legacy" version.
+
+### Install the legacy version
+
+Use the `dotnet` command to install version `0.4.421302` of .NET Upgrade Assistant.
+
+```dotnetcli
+dotnet tool install upgrade-assistant -g --version 0.4.421302
+```
+
+> [!IMPORTANT]
+> If you configured extra NuGet feed sources, the install might fail with an error indicating that the NuGet package isn't available in the feed. Use the `--ignore-failed-sources` parameter to treat those failures as warnings instead of errors, bypassing the other NuGet feed sources:
+>
+> ```dotnetcli
+> dotnet tool install upgrade-assistant -g --ignore-failed-sources --version 0.4.421302
+> ```
+
 ## Demo app
 
 You can use the [Basic Calculator Sample][wcf-sample] project to test upgrading with the Upgrade Assistant, which is also the demo used in this documentation.
@@ -39,8 +64,6 @@ You can use the [Basic Calculator Sample][wcf-sample] project to test upgrading 
 If you want to try out a more complicated sample, see the [BeanTrader sample](https://github.com/dotnet/windows-desktop/tree/main/Samples/BeanTrader) created by Mike Rousos.
 
 ## Run upgrade-assistant
-
-If you haven't installed the .NET Upgrade Assistant tool, follow the [installation instructions](https://github.com/dotnet/upgrade-assistant#installation).
 
 Open a terminal and navigate to the folder where the target project or solution is located. Run the `upgrade-assistant upgrade` command, passing in the name of the project or solution you're upgrading.
 
@@ -167,7 +190,7 @@ Please choose a backup path
 The tool chooses a default backup path named after the current folder, but with `.backup` appended to it. You can choose a custom path as an alternative to the default path. For each upgraded project, the folder of the project is copied to the backup folder. In this example, the `CalculatorService` folder is copied from _CalculatorSample\CalculatorService_ to _CalculatorSample.backup\CalculatorService_ during the backup step:
 
 ```output
-[10:25:53 INF] Backing up C:\Users\Desktop\CalculatorSample\CalculatorService to C:\Users\t-simonaliao\OneDrive - Microsoft\Desktop\CalculatorSample.backup\CalculatorService
+[10:25:53 INF] Backing up C:\Users\Desktop\CalculatorSample\CalculatorService to C:\Users\OneDrive - Microsoft\Desktop\CalculatorSample.backup\CalculatorService
 [10:25:53 INF] Project backed up to C:\Users\Desktop\CalculatorSample.backup\CalculatorService
 [10:25:53 INF] Upgrade step Back up project applied successfully
 Please press enter to continue...
@@ -545,6 +568,5 @@ There are several known problems that can occur when using the .NET Upgrade Assi
 - Blog: [Upgrading a WCF service to .NET 6 with CoreWCF](https://devblogs.microsoft.com/dotnet/upgrading-a-wcf-service-to-dotnet-6/)
 - Blog: [CoreWCF 1.0 has been Released, WCF for .NET Core and .NET 5+](https://devblogs.microsoft.com/dotnet/corewcf-v1-released/)
 - Docs: [Overview of the .NET Upgrade Assistant](upgrade-assistant-overview.md)
-- [.NET Upgrade Assistant GitHub Repository](https://github.com/dotnet/upgrade-assistant)
 
 [wcf-sample]: https://github.com/dotnet/samples/tree/main/core/porting/upgrade-assistant-wcf-framework/CalculatorSample

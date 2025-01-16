@@ -6,7 +6,7 @@ public static class VersionTest
     public static void Main()
     {
         GetVersionFromRegistry();
-        Get45PlusFromRegistry();
+        //Get45PlusFromRegistry();
     }
 
     private static void GetVersionFromRegistry()
@@ -73,13 +73,13 @@ public static class VersionTest
                         if (string.IsNullOrEmpty(install))
                         {
                             // No install info; it must be later.
-                            Console.WriteLine($"{versionKeyName}  {name}");
+                            Console.WriteLine($"  {versionKeyName}  {name}");
                         }
                         else if (install == "1")
                         {
                             if (!string.IsNullOrEmpty(sp))
                             {
-                                Console.WriteLine($"{subKeyName}  {name}  SP{sp}");
+                                Console.WriteLine($"  {subKeyName}  {name}  SP{sp}");
                             }
                             else
                             {
@@ -98,7 +98,8 @@ public static class VersionTest
         //<snippet2>
         const string subkey = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\";
 
-        using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(subkey))
+        using (var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
+        using (var ndpKey = baseKey.OpenSubKey(subkey))
         {
             if (ndpKey != null && ndpKey.GetValue("Release") != null)
             {
@@ -113,8 +114,10 @@ public static class VersionTest
         // Checking the version using >= enables forward compatibility.
         string CheckFor45PlusVersion(int releaseKey)
         {
+            if (releaseKey >= 533320)
+                return "4.8.1 or later";
             if (releaseKey >= 528040)
-                return "4.8 or later";
+                return "4.8";
             if (releaseKey >= 461808)
                 return "4.7.2";
             if (releaseKey >= 461308)

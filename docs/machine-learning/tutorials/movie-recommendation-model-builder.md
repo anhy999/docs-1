@@ -27,7 +27,7 @@ In this tutorial, you:
 
 ## Prerequisites
 
-For a list of pre-requisites and installation instructions, visit the [Model Builder installation guide](../how-to-guides/install-model-builder.md).
+For a list of prerequisites and installation instructions, visit the [Model Builder installation guide](../how-to-guides/install-model-builder.md).
 
 ## Create a C# Class Library
 
@@ -54,7 +54,7 @@ Each row in the dataset contains information regarding a movie rating.
 
 When first adding Model Builder to the solution it will prompt you to create an `mbconfig` file. The `mbconfig` file keeps track of everything you do in Model Builder to allow you to reopen the session.
 
-1. In Solution Explorer, right-click the **MovieRecommender** project, and select **Add > Machine Learning Model...**.
+1. In Solution Explorer, right-click the **MovieRecommender** project, and select **Add > Machine Learning Model**.
 1. In the dialog, name the Model Builder project **MovieRecommender**, and click **Add**.
 
 ## Choose a scenario
@@ -109,7 +109,7 @@ The result of the training step will be one model which had the best performance
 
 Additionally, in the **Output** window of Visual Studio, there will be a summary table containing top models and their metrics.
 
-In this section you can also test your model by performing a single prediction. It provides you with text boxes to input values for each of your feature columns and you can select the **Predict** button to get a prediction using the best model. By default this will be filled in by the first row in your dataset.
+In this section you can also test your model by performing a single prediction. It provides you with text boxes to input values for each of your feature columns and you can select **Predict** to get a prediction using the best model. By default this will be filled in by the first row in your dataset.
 
 ## (Optional) Consume the model
 

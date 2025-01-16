@@ -1,3 +1,4 @@
+items:
 - name: Enterprise Application Patterns Using .NET MAUI
   href: index.md
   items:
@@ -16,12 +17,14 @@
   - name: Validation
     href: validation.md
   - name: Configuration Management
-    href: configuration-management.md
+    href: app-settings-management.md
   - name: Containerized Microservices
     href: micro-services.md
   - name: Accessing Remote Data
-    href: accessing-remote-data.md    
+    href: accessing-remote-data.md
   - name: Authentication and Authorization
     href: authentication-and-authorization.md
+  - name: MVVM Community Toolkit Features
+    href: mvvm-community-toolkit-features.md
   - name: Unit Testing
     href: unit-testing.md

@@ -3,7 +3,7 @@ title: Use TcpClient and TcpListener
 description: Learn how to use the TcpClient class to create a socket to request and receive data using TCP in .NET.
 author: IEvangelist
 ms.author: dapine
-ms.date: 08/24/2022
+ms.date: 04/17/2024
 helpviewer_keywords: 
   - "protocols, TCP"
   - "network resources, TCP"
@@ -256,7 +256,7 @@ Which is equivalent to the following socket code:
 ```csharp
 using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
 
-// Be aware that transfering the ownership means that closing/disposing the stream will also close the underlying socket.
+// Be aware that transferring the ownership means that closing/disposing the stream will also close the underlying socket.
 using var stream = new NetworkStream(socket, ownsSocket: true);
 ```
 

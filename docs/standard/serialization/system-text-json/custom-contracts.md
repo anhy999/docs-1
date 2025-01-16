@@ -1,7 +1,7 @@
 ---
 title: Custom serialization and deserialization contracts
 description: "Learn how to write your own contract resolution logic to customize the JSON contract for a type."
-ms.date: 09/26/2022
+ms.date: 06/15/2023
 ---
 # Customize a JSON contract
 
@@ -13,7 +13,8 @@ Starting in .NET 7, you can customize these JSON contracts to provide more contr
 - Support multiple names for a single property (for example, if a previous library version used a different name).
 - Ignore properties with a specific name, type, or value.
 - Distinguish between explicit `null` values and the lack of a value in the JSON payload.
-<!--Add links to blog post when published.-->
+- Support <xref:System.Runtime.Serialization> attributes, such as <xref:System.Runtime.Serialization.DataContractAttribute>. For more information, see [System.Runtime.Serialization attributes](migrate-from-newtonsoft.md#systemruntimeserialization-attributes).
+- Throw an exception if the JSON includes a property that's not part of the target type. For more information, see [Handle missing members](migrate-from-newtonsoft.md#handle-missing-members).
 
 ## How to opt in
 
@@ -49,7 +50,7 @@ There are two ways to plug into customization. Both involve obtaining a resolver
 The <xref:System.Text.Json.Serialization.Metadata.JsonTypeInfo.Kind?displayProperty=nameWithType> property indicates how the converter serializes a given type&mdash;for example, as an object or as an array, and whether its properties are serialized. You can query this property to determine which aspects of a type's JSON contract you can configure. There are four different kinds:
 
 | `JsonTypeInfo.Kind` | Description |
-| - | - |
+|---------------------|-------------|
 | <xref:System.Text.Json.Serialization.Metadata.JsonTypeInfoKind.Object?displayProperty=nameWithType> | The converter will serialize the type into a JSON object and uses its properties. **This kind is used for most class and struct types and allows for the most flexibility.** |
 | <xref:System.Text.Json.Serialization.Metadata.JsonTypeInfoKind.Enumerable?displayProperty=nameWithType> | The converter will serialize the type into a JSON array. This kind is used for types like `List<T>` and array. |
 | <xref:System.Text.Json.Serialization.Metadata.JsonTypeInfoKind.Dictionary?displayProperty=nameWithType> | The converter will serialize the type into a JSON object. This kind is used for types like `Dictionary<K, V>`. |
@@ -62,7 +63,7 @@ A modifier is an `Action<JsonTypeInfo>` or a method with a <xref:System.Text.Jso
 The following table shows the modifications you can make and how to achieve them.
 
 | Modification | Applicable `JsonTypeInfo.Kind` | How to achieve it | Example |
-| - | - | - | - |
+|--------------|--------------------------------|-------------------|---------|
 | Customize a property's value | `JsonTypeInfoKind.Object` | Modify the <xref:System.Text.Json.Serialization.Metadata.JsonPropertyInfo.Get?displayProperty=nameWithType> delegate (for serialization) or <xref:System.Text.Json.Serialization.Metadata.JsonPropertyInfo.Set?displayProperty=nameWithType> delegate (for deserialization) for the property. | [Increment a property's value](#example-increment-a-propertys-value) |
 | Add or remove properties | `JsonTypeInfoKind.Object` | Add or remove items from the <xref:System.Text.Json.Serialization.Metadata.JsonTypeInfo.Properties?displayProperty=nameWithType> list. | [Serialize private fields](#example-serialize-private-fields) |
 | Conditionally serialize a property | `JsonTypeInfoKind.Object` | Modify the <xref:System.Text.Json.Serialization.Metadata.JsonPropertyInfo.ShouldSerialize?displayProperty=nameWithType> predicate for the property. | [Ignore properties with a specific type](#example-ignore-properties-with-a-specific-type) |
@@ -113,8 +114,9 @@ Besides customizing a contract, there are other ways to influence serialization 
 - By modifying <xref:System.Text.Json.JsonSerializerOptions>, for example, to set a naming policy or serialize enumeration values as strings instead of numbers.
 - By writing a custom converter that does the actual work of writing the JSON and, during deserialization, constructing an object.
 
-Contract customization is an improvement over these pre-existing customizations because you might not have access to the type to add attributes, and writing a custom converter is complex and hurts performance.
+Contract customization is an improvement over these pre-existing customizations because you might not have access to the type to add attributes. In addition, writing a custom converter is complex and hurts performance.
 
 ## See also
 
-- [JSON contract customization blog post](https://devblogs.microsoft.com/dotnet/announcing-dotnet-7-preview-6/#json-contract-customization)
+- [JSON contract customization (blog post)](https://devblogs.microsoft.com/dotnet/announcing-dotnet-7-preview-6/#json-contract-customization)
+- [What's new in System.Text.Json in .NET 7 (blog post)](https://devblogs.microsoft.com/dotnet/system-text-json-in-dotnet-7/)

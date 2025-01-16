@@ -1,17 +1,13 @@
 ---
 title: Test a .NET class library using Visual Studio
 description: Learn how to use Visual Studio to create and run a unit test project for a .NET class library.
-ms.date: 11/11/2022
-zone_pivot_groups: dotnet-version
+ms.date: 08/23/2023
 dev_langs:
   - "csharp"
   - "vb"
 ms.custom: "vs-dotnet"
-recommendations: false
 ---
 # Tutorial: Test a .NET class library with .NET using Visual Studio
-
-::: zone pivot="dotnet-7-0,dotnet-6-0"
 
 This tutorial shows how to automate unit testing by adding a test project to a solution.
 
@@ -37,22 +33,19 @@ Unit tests provide automated software testing during your development and publis
 
    1. On the **Configure your new project** page, enter **StringLibraryTest** in the **Project name** box. Then choose **Next**.
 
-   1. On the **Additional information** page, select **.NET 7 (Standard-term support)** in the **Framework** box. Then choose **Create**.
+   1. On the **Additional information** page, select **.NET 8** in the **Framework** box. Then choose **Create**.
 
 1. Visual Studio creates the project and opens the class file in the code window with the following code. If the language you want to use is not shown, change the language selector at the top of the page.
 
    ```csharp
-   using Microsoft.VisualStudio.TestTools.UnitTesting;
+   namespace StringLibraryTest;
 
-   namespace StringLibraryTest
+   [TestClass]
+   public class UnitTest1
    {
-       [TestClass]
-       public class UnitTest1
+       [TestMethod]
+       public void TestMethod1()
        {
-           [TestMethod]
-           public void TestMethod1()
-           {
-           }
        }
    }
    ```
@@ -73,7 +66,7 @@ Unit tests provide automated software testing during your development and publis
 
    The source code created by the unit test template does the following:
 
-   - It imports the <xref:Microsoft.VisualStudio.TestTools.UnitTesting?displayProperty=nameWithType> namespace, which contains the types used for unit testing.
+   - It imports the <xref:Microsoft.VisualStudio.TestTools.UnitTesting?displayProperty=nameWithType> namespace, which contains the types used for unit testing. In C#, the namespace is imported via a `global using` directive in *GlobalUsings.cs*.
    - It applies the <xref:Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute> attribute to the `UnitTest1` class.
    - It applies the <xref:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute> attribute to define `TestMethod1` in C# or `TestSub` in Visual Basic.
 
@@ -102,7 +95,7 @@ The most common tests call members of the <xref:Microsoft.VisualStudio.TestTools
 | `Assert.IsFalse`   | Verifies that a condition is `false`. The assert fails if the condition is `true`. |
 | `Assert.IsNotNull` | Verifies that an object isn't `null`. The assert fails if the object is `null`. |
 
-You can also use the <xref:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.ThrowsException%2A?displayProperty=nameWithType> method in a test method to indicate the type of exception it's expected to throw. The test fails if the specified exception isn't thrown.
+You can also use the <xref:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.ThrowsException%2A?displayProperty=nameWithType> (or `Assert.Throws` and `Assert.ThrowsExactly` if using MSTest 3.8 and later) method in a test method to indicate the type of exception it's expected to throw. The test fails if the specified exception isn't thrown.
 
 In testing the `StringLibrary.StartsWithUpper` method, you want to provide a number of strings that begin with an uppercase character. You expect the method to return `true` in these cases, so you can call the <xref:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.IsTrue%2A?displayProperty=nameWithType> method. Similarly, you want to provide a number of strings that begin with something other than an uppercase character. You expect the method to return `false` in these cases, so you can call the <xref:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.IsFalse%2A?displayProperty=nameWithType> method.
 
@@ -114,29 +107,26 @@ To create the test methods:
 
 1. In the *UnitTest1.cs* or *UnitTest1.vb* code window, replace the code with the following code:
 
-   :::code language="csharp" source="./snippets/library-with-visual-studio/csharp/StringLibraryTest/UnitTest1.cs":::
+   :::code language="csharp" source="./snippets/library-with-visual-studio/csharp/StringLibraryTestNet8/UnitTest1.cs":::
    :::code language="vb" source="./snippets/library-with-visual-studio/vb/StringLibraryTest/UnitTest1.vb":::
 
    The test of uppercase characters in the `TestStartsWithUpper` method includes the Greek capital letter alpha (U+0391) and the Cyrillic capital letter EM (U+041C). The test of lowercase characters in the `TestDoesNotStartWithUpper` method includes the Greek small letter alpha (U+03B1) and the Cyrillic small letter Ghe (U+0433).
 
 1. On the menu bar, select **File** > **Save UnitTest1.cs As** or **File** > **Save UnitTest1.vb As**. In the **Save File As** dialog, select the arrow beside the **Save** button, and select **Save with Encoding**.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/save-file-as-dialog.png" alt-text="Visual Studio Save File As dialog":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/save-file-as-dialog.png" alt-text="Visual Studio Save File As dialog":::
 
 1. In the **Confirm Save As** dialog, select the **Yes** button to save the file.
 
 1. In the **Advanced Save Options** dialog, select **Unicode (UTF-8 with signature) - Codepage 65001** from the **Encoding** drop-down list and select **OK**.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/advanced-save-options.png" alt-text="Visual Studio Advanced Save Options dialog":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/advanced-save-options.png" alt-text="Visual Studio Advanced Save Options dialog":::
 
    If you fail to save your source code as a UTF8-encoded file, Visual Studio may save it as an ASCII file. When that happens, the runtime doesn't accurately decode the UTF8 characters outside of the ASCII range, and the test results won't be correct.
 
 1. On the menu bar, select **Test** > **Run All Tests**. If the **Test Explorer** window doesn't open, open it by choosing **Test** > **Test Explorer**. The three tests are listed in the **Passed Tests** section, and the **Summary** section reports the result of the test run.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/test-explorer-window.png" alt-text="Test Explorer window with passing tests":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/test-explorer-window.png" alt-text="Test Explorer window with passing tests":::
 
 ## Handle test failures
 
@@ -157,15 +147,13 @@ If you're doing test-driven development (TDD), you write tests first and they fa
 
 1. Run the test by selecting **Test** > **Run All Tests** from the menu bar. The **Test Explorer** window indicates that two tests succeeded and one failed.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/failed-test-window.png" alt-text="Test Explorer window with failing tests":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/failed-test-window.png" alt-text="Test Explorer window with failing tests":::
 
 1. Select the failed test, `TestDoesNotStartWith`.
 
    The **Test Explorer** window displays the message produced by the assert: "Assert.IsFalse failed. Expected for 'Error': false; actual: True". Because of the failure, no strings in the array after "Error" were tested.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/failed-test-detail.png" alt-text="Test Explorer window showing the IsFalse assertion failure":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/failed-test-detail.png" alt-text="Test Explorer window showing the IsFalse assertion failure":::
 
 1. Remove the string "Error" that you added in step 1. Rerun the test and the tests pass.
 
@@ -177,13 +165,11 @@ To test the Release build:
 
 1. In the Visual Studio toolbar, change the build configuration from **Debug** to **Release**.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/visual-studio-toolbar-release.png" alt-text="Visual Studio toolbar with release build highlighted":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/visual-studio-toolbar-release.png" alt-text="Visual Studio toolbar with release build highlighted":::
 
 1. In **Solution Explorer**, right-click the **StringLibrary** project and select **Build** from the context menu to recompile the library.
 
-   > [!div class="mx-imgBorder"]
-   > :::image type="content" source="./media/testing-library-with-visual-studio/build-library-context-menu.png" alt-text="StringLibrary context menu with build command":::
+   :::image type="content" source="./media/testing-library-with-visual-studio/build-library-context-menu.png" alt-text="StringLibrary context menu with build command":::
 
 1. Run the unit tests by choosing **Test** > **Run All Tests** from the menu bar. The tests pass.
 
@@ -195,8 +181,8 @@ Visual Studio starts the test project with the debugger attached. Execution will
 
 ## Additional resources
 
-* [Unit test basics - Visual Studio](/visualstudio/test/unit-test-basics)
-* [Unit testing in .NET](../testing/index.md)
+- [Unit test basics - Visual Studio](/visualstudio/test/unit-test-basics)
+- [Unit testing in .NET](../testing/index.md)
 
 ## Next steps
 
@@ -214,11 +200,3 @@ A library doesn't have to be distributed as a package. It can be bundled with a 
 
 > [!div class="nextstepaction"]
 > [Publish a .NET console application using Visual Studio](publishing-with-visual-studio.md)
-
-::: zone-end
-
-::: zone pivot="dotnet-core-3-1,dotnet-5-0"
-
-This tutorial is only available for .NET 6 and .NET 7. Select one of those options at the top of the page.
-
-::: zone-end

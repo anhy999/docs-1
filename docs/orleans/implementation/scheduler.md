@@ -1,14 +1,14 @@
 ---
 title: Scheduling overview
 description: Explore the scheduling overview in .NET Orleans.
-ms.date: 03/17/2022
+ms.date: 07/03/2024
 ---
 
 # Scheduling overview
 
 There are two forms of scheduling in Orleans which are relevant to grains:
 
-1. Request scheduling, the scheduling of incoming grain calls for execution according to scheduling rules discussed [in Reentrancy](../grains/reentrancy.md).
+1. Request scheduling, the scheduling of incoming grain calls for execution according to scheduling rules discussed [in Request scheduling](../grains/request-scheduling.md).
 1. Task scheduling, the scheduling of synchronous blocks of code to be executed in a *single-threaded* manner
 
 All grain code is executed on the grain's task scheduler, which means that requests are also executed on the grain's task scheduler.

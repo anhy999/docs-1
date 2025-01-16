@@ -2,7 +2,7 @@
 title: Working with LINQ
 description: This tutorial teaches you how to generate sequences with LINQ, write methods for use in LINQ queries, and distinguish between eager and lazy evaluation.
 ms.date: 10/29/2018
-ms.technology: csharp-linq
+ms.subservice: csharp-linq
 ms.assetid: 0db12548-82cb-4903-ac88-13103d70aa77
 ---
 
@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using System.Linq;
 ```
 
-If these three lines (`using` statements) aren't at the top of the file, our program will not compile.
+If these three lines (`using` directives) aren't at the top of the file, your program might not compile.
 
 Now that you have all of the references that you'll need, consider what constitutes a deck of cards. Commonly, a deck of playing cards has four suits, and each suit has thirteen values. Normally, you might consider creating a `Card` class right off the bat and populating a collection of `Card` objects by hand. With LINQ, you can be more concise than the usual way of dealing with creating a deck of cards. Instead of creating a `Card` class, you can create two sequences to represent suits and ranks, respectively. You'll create a really simple pair of [*iterator methods*](../iterators.md#enumeration-sources-with-iterator-methods) that will generate the ranks and suits as <xref:System.Collections.Generic.IEnumerable%601>s of strings:
 
@@ -345,9 +345,8 @@ Aside from LINQ, you learned a bit about a technique magicians use for card tric
 
 For more information on LINQ, see:
 
-- [Language Integrated Query (LINQ)](../programming-guide/concepts/linq/index.md)
-- [Introduction to LINQ](../programming-guide/concepts/linq/index.md)
-- [Basic LINQ Query Operations (C#)](../programming-guide/concepts/linq/basic-linq-query-operations.md)
-- [Data Transformations With LINQ (C#)](../programming-guide/concepts/linq/data-transformations-with-linq.md)
-- [Query Syntax and Method Syntax in LINQ (C#)](../programming-guide/concepts/linq/query-syntax-and-method-syntax-in-linq.md)
-- [C# Features That Support LINQ](../programming-guide/concepts/linq/features-that-support-linq.md)
+- [Introduction to LINQ](/dotnet/csharp/linq/)
+- [Basic LINQ Query Operations (C#)](../linq/standard-query-operators/index.md)
+- [Data Transformations With LINQ (C#)](../linq/standard-query-operators/index.md)
+- [Query Syntax and Method Syntax in LINQ (C#)](../linq/get-started/write-linq-queries.md)
+- [C# Features That Support LINQ](../linq/get-started/features-that-support-linq.md)

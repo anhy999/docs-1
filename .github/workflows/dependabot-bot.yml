@@ -13,6 +13,9 @@ on:
         required: true
         default: "Manual run"
 # Run on the latest version of Ubuntu
+permissions:
+  contents: read
+
 jobs:
   dependabot-bot:
     runs-on: ubuntu-latest
@@ -22,7 +25,12 @@ jobs:
 
     # Checkout the repo into the workspace within the VM
     steps:
-      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Harden Runner
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       # - name: Setup .NET
       #   uses: actions/setup-dotnet@4d4a70f4a5b2a5a5329f13be4ac933f2c9206ac0
       #   with:
@@ -44,8 +52,9 @@ jobs:
           dependabot-yml-path: ".github/dependabot.yml"
       - name: Create pull request
         if: github.event_name == 'workflow_dispatch' || github.repository_owner == 'dotnet'
-        uses: peter-evans/create-pull-request@b4d51739f96fca8047ad065eccef63442d8e99f7
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f
         with:
+          branch: create-dependabotconfig-pull-request/patch
           title: "Update dependabot.yml - automatically."
           body: ".NET dependabot-bot automated PR. 🤖"
           commit-message: ".NET dependabot-bot automated PR."
